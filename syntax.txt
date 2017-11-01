@@ -1,0 +1,97 @@
+<cfoutput >     print something on the screen     </cfoutput >
+
+<cfoutput >     #form.fieldname#     </cfoutput >
+
+<cfset  firstname = "yuriy" />
+<cfset  firstname = 4 />
+
+==var Scopes:
+Variables > Only to the current page
+CGI > created by apache web server data related to latest request
+Server > by ColdFusion Server
+Application > available in entire application
+Session > specific user session
+
+<!---Step 6 - The server scope --->
+		<cfdump var="#server#" >
+
+<!---Step 5 - Experiment with the CGI scope--->
+<cfdump var="#cgi#" >
+
+== Structure   like object
+1 explicit notation
+<cfset stUser = structNew() />
+<cfset stUser.fn = 'yuriy' />
+<cfset stUser.ln = 'kolodiy' />
+<cfset stUser.age = 22 />
+
+
+2 implicit notation
+<cfset stUser = {fn = 'yuriy', ln = 'kolodiy', age = 22} />
+
+
+<cfdump var="#stUser#" >
+
+
+<p>Dumping stUser after using structClear()</p>
+	<cfset structClear(stUser) />
+
+<cfset structDelete(stUser,'age')>
+	<cfdump var="#stUser#" label="explicit after deletion" >
+
+	<!---Step 5 - use structCount()--->
+	<p>stUserImplicit holds XXX elements</p>
+	
+	<cfoutput >
+		#structCount(stUser2)#
+	</cfoutput>
+
+==Arrays    indexed at 1, not 0 :))))))
+
+<cfset Colors = arrayNew(1) />
+<cfset Colors[1] = 'red' />
+<cfset Colors[2] = 'blue' />
+<cfset Colors[3] = 'green' />
+
+
+<cfcet C = ['sads','sdf','fdg'] />
+
+arrayAppend(array, value)
+arrayPrepend(array, value)
+arrayLen(array)
+
+expand and contract dynamically !!!
+
+==DATABASE
+
+<cfquery datasource="hdStreet" name="rsAllNews" >
+	
+	SELECT FLD_NEWSTITLE, FLD_NEWSCREATIONDATE, FLD_NEWSID
+	FROM TBL_NEWS
+	ORDER BY FLD_NEWSCREATIONDATE DESC
+</cfquery> 
+		
+	
+	  <h1> News</h1>
+      <table>
+	<cfoutput query="rsAllNews">
+		<tr>
+			<td>#dateFormat(FLD_NEWSCREATIONDATE, 'mmm dd yyyy')#</td>
+				<td>#FLD_NEWSTITLE#</td>
+					<td><a href="news.cfm">Read More</a></td>
+		</tr>
+	</cfoutput>
+
+
+____
+
+   <cfquery datasource="hdStreet" name="rsCurrentEvents" >
+     
+     SELECT FLD_EVENTID, FLD_EVENTNAME, FLD_EVENTDATETIME, FLD_EVENTLOCATION, FLD_EVENTVENUE
+     FROM TBL_EVENTS
+     WHERE FLD_EVENTDATETIME >= #now()#
+     ORDER BY FLD_EVENTDATETIME ASC
+     </cfquery> 
+
+
+
