@@ -1,0 +1,19 @@
+add database ==========
+
+if it local paste to folder db  or use external
+Admin > Data > AddSource  add database what u want  mysql oracle etc
+
+<cfquery datasoutse="mydb" name="icanusesthisname">
+
+SELECT user
+FROM
+people
+</cfquery>
+
+
+<cfdump var=#icanusesthisname#>
+
+or
+
+<cfoutput query="icanusesthisname">     > this query LOOPS results
+#dfsf#
