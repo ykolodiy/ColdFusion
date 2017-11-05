@@ -15,3 +15,23 @@ if another directory
 u can use taglib
 <cfimport prefix="mytag" taglib="path_to_folder">  haha this dir has file foo.cfm
 <mytag:foo>
+
+
+!!!! u can use open and close > cf_imageWrapper.cfm
+<cf_fuck></cf_fuck>   but tag will apper 2 times
+so
+<cf_dump #thisTag#> will show u methods that run and u can use this method
+
+// make legend not mandatory
+<cfparam name=attribute.legend default="no image"
+<cfif thisTag.executionMode EQ 'start'>
+  <div bu can wram image here
+  <cfelse>   //this will execute on closing tag
+  <p> <cfoutput>#attribute.legend# </cfoutput> </p>
+ </cfif>
+  
+  
+  now at calling page
+  <cf_imageWrapper legend="blablabla">
+  <img src>
+  </cf_imageWrapper>
