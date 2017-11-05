@@ -11,9 +11,23 @@ and create dinamic links:
 
 
 
+details.cfm?tourid=1
+now get variable and populate:
 
-
-<cfquery> 
+<cfquery datasoutce name="y"> 
 SELECT TOURID, TOURNAME, TOURDESCRIPTION
 FROM TOURS
 WHERE TOURID= #url.tourid#
+
+
+
+<cfoutput query="y">
+<h1> #y.TOURNAME# </h1>
+<h2> #y.TOURDESCRIPTION# </h2>
+
+
+
+!!!!!! if user hit directly to details.cfm without params it get error so u need add default 
+<cfparam name="url.tourId" default=2>
+
+
