@@ -1,0 +1,9 @@
+<cfquery
+SELECT
+FROM
+
+
+INSERT:
+<cfquery
+INSERT INTO TOURS (ID,NAME)
+VALUES (#form.id#, #form.name#)
