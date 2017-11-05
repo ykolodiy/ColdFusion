@@ -1,0 +1,7 @@
+<form action=y.cfm
+<input name=x
+
+
+y.cfm
+<cfoutput>
+you put #form.x#
