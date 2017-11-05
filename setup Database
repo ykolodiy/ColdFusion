@@ -17,3 +17,15 @@ or
 
 <cfoutput query="icanusesthisname">     > this query LOOPS results
 #dfsf#
+
+
+
+SELECT
+FROM
+<cfif isDefined form.tourID
+WHERE
+
+cfelse
+ cfparam default=1
+  /cfif
+  /cfquery
