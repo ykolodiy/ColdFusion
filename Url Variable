@@ -1,0 +1,19 @@
+tour.cfm
+<cfquery datasoutc name="x"
+SELECT TOURID, TOURNAME
+FROM TOURS
+ORDER BY TOURNAME
+
+and create dinamic links:
+<cfoutbut query="x"
+<a href=details.cfm?TOURID=#x.TOURID#>#x.TOURNAME#</a>
+
+
+
+
+
+
+<cfquery> 
+SELECT TOURID, TOURNAME, TOURDESCRIPTION
+FROM TOURS
+WHERE TOURID= #url.tourid#
