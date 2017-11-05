@@ -3,7 +3,7 @@ SELECT
 FROM
 
 
-
+<cfform
 <input submit name="insetTour"
 
 // run id submit pressed
