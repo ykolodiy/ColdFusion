@@ -9,7 +9,7 @@ admin>debug output setting
 - create file where code is present   fuck.cfm
 - call customa tag >cf_fuck atr1="val1"  >  if the same directory
 
-if another directory
+3if another directory
 <cfmodule template=./suck/fuck.cfm atr1="val1">
 
 u can use taglib
@@ -35,3 +35,34 @@ so
   <cf_imageWrapper legend="blablabla">
   <img src>
   </cf_imageWrapper>
+
+
+
+4 FUNCTION
+F.CFM
+<cffunction name='getpage' returntype='query'>
+//pass arg
+<cfargument name='pageid' type='numeric' requirede>
+<CFSET VAR rspage=''>
+
+<cfquery datasoutce name='rspage'>
+SELECT
+FROM
+WHERE FLD_PAGEID = #arguments.pageid#
+</sfquery>
+<sfreturn rspage  />    //return data to who called this func
+
+
+
+</cffunction>
+
+
+// in another file include this function
+<cfinclude template='F.CFM'>
+<cfset rspage=getpage(1)
+
+
+
+
+
+
