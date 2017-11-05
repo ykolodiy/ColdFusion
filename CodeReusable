@@ -1,0 +1,17 @@
+1 include
+admin>debug output setting
+
+<cfinclude template="header.cfm"
+
+
+
+2 customa tag
+- create file where code is present   fuck.cfm
+- call customa tag >cf_fuck atr1="val1"  >  if the same directory
+
+if another directory
+<cfmodule template=./suck/fuck.cfm atr1="val1">
+
+u can use taglib
+<cfimport prefix="mytag" taglib="path_to_folder">  haha this dir has file foo.cfm
+<mytag:foo>
