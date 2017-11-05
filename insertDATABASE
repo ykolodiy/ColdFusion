@@ -3,7 +3,19 @@ SELECT
 FROM
 
 
+
+<input submit name="insetTour"
+
+// run id submit pressed
+<cfif isDefined="form.insetTour"
+
+
+
+
 INSERT:
 <cfquery
 INSERT INTO TOURS (ID,NAME)
 VALUES (#form.id#, #form.name#)
+
+
+
