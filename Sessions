@@ -49,3 +49,28 @@ WHERE EMAIL = #arguments.useremail# AND PASS = #arguments.password#  AND UserisA
 <cfset structdelete(session, stloggedinuser)
 <cflogout>
 
+
+
+
+
+FORM
+<cfif structkeyexist (form, 'submit')>
+<create auth object to auth>
+<cfset authservice=createobject('component', fctrainin.componennt.auth)
+<cfset authservice.validate(email, pass)
+<cfset isuserloggedin = authservice.dologin(email, pass)
+
+
+
+after loged in
+<cfif structkeyexist=(session, 'used'>    if exist user is logged in
+// display welcome
+<cfelse>
+//display login form
+
+
+
+LOGOUT
+<a href=indec.cfm?logout>
+<cfif structkeyexist(url, logout)
+<cfset createobject('component' , cftrainin.auth).dologout>
