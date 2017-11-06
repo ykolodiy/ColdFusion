@@ -1,0 +1,49 @@
+CF creates CFID and CFTOKEN and start onstartmethod
+
+1 Enable Session Management
+Add property to Application.cfc > 
+<cfset this.sessionmanagement = true>     cfid cftoken vars created now for each user as cookies
+how long this session last? CF admin > serv setting > memory > change default timeout   or add to Application.cfc
+<cfset this.sessionTimeout = createtimespan (0 20 00 )
+
+
+2 Authentication and Authorisation
+- login form
+- cleant and server validation
+- use users data to query table users from db
+- if query retirn 1 and only 1 record > other error
+- if 1 log user in and store user daya in session scope. display welcome message
+
+Create component with 3 methods
+1 validation
+<cfset arrayofmessages on error > ...
+2 dologin > return boolean   true login is success
+- <! create var if user logged in>
+<cfset var isuserloggedin = false>
+<get user data from db>
+<cfquery name="rsloginuse" >
+SELECT USERS.FN, USERS.LN, USERS.ID, USERS.EMAIL, USERS.PASS
+FROM USERS INNER JOIN ROLES ON USERS.ROLE = ROLES.ROLLID
+WHERE EMAIL = #arguments.useremail# AND PASS = #arguments.password#  AND UserisAvtive=1
+
+-<check if query return just 1 user
+<cfif rsloginuse.recordcount=1>
+
+<cflogin>
+<cfloginuser name="#rsloginuser.FN#" password="#rsloginuser.pass#" roles="#rsloginuser.rollname#">
+</cflogin>
+
+//save user data in session
+<cfset session.stloggedinuser={'uswerfirstname' = rsloginuse.FN, 'uswerlastname' = rsloginuse.LN, 'uswerid' = rsloginuse.ID}
+
+<cfset var isuserloggedin = true>
+</cfif>
+
+- <return var isuserloggedin>
+<cfreturn isuserloggedin>
+
+
+
+3 do logout  void
+
+
