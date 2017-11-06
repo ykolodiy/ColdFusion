@@ -45,5 +45,7 @@ WHERE EMAIL = #arguments.useremail# AND PASS = #arguments.password#  AND UserisA
 
 
 3 do logout  void
-
+//delete user from session scope
+<cfset structdelete(session, stloggedinuser)
+<cflogout>
 
