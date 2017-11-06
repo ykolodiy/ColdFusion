@@ -1,0 +1,9 @@
+SELECT
+FROM 
+WHERE id=#arguments.newsid#
+
+use cfquery param like this
+
+SELECT
+FROM 
+WHERE id=<cfqueryparam value='#arguments.newsid#' cfsqltype='cf_sql_integer' >
