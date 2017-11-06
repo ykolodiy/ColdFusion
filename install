@@ -1,0 +1,12 @@
+https://medium.com/@rhpt/install-coldfusion-11-on-ubuntu-66d2efdf03a2
+
+sudo apt-get update
+sudo apt-get install libstdc++5
+sudo ./ColdFusion_11_WWE_linux64.bin    777?
+
+run: opt/coldfusion2016/cfusion/bin > sudo ./coldfuison start
+
+http://<ip_address>:8500/CFIDE/Administrator/index.cfm
+
+admin
+pass
