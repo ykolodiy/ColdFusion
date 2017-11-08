@@ -6,14 +6,14 @@
 </head>
 
 <body>
-
+<cfsetting requestTimeOut = "9000" />
 
 <!---LOOP https://helpx.adobe.com/coldfusion/cfml-reference/coldfusion-tags/tags-j-l/cfloop-looping-over-a-list-a-file-or-an-array.html --->
 <cfset myArray = ["https://www.pearsonschool.com/", "https://www.pearsonschool.com/index.cfm?locator=PSZu64", "https://www.pearsonschool.com/index.cfm?locator=PSZu6f"] >
 <cfloop array="#myArray#" index="idx">
-            <cfoutput>  #idx#  </cfoutput>
-			<cfhttp url="https://www.pearsonschool.com" result="result" method="GET"> </cfhttp> 	
-		     <cfoutput >  >> #result.Responseheader.Status_Code#</cfoutput>
+            
+			<cfhttp url="#idx#" result="result" method="GET"> </cfhttp> 	
+		     <cfoutput > #idx# > #result.Responseheader.Status_Code#</cfoutput>
 		     <cfoutput ><br></cfoutput>
 </cfloop>
 
@@ -22,3 +22,4 @@
 
 </body>
 </html>
+
