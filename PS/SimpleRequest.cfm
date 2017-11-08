@@ -14,7 +14,24 @@
 		     <cfoutput >   #result.Responseheader.Status_Code#</cfoutput>
 	
 
-<cfdump var="#result#" >
+<!---PLAYING WITH ARRAY --->
+
+
+
+
+<!--- putting result to string --->
+<cfset dataString = ToString(#result.Header#)> 
+<!--- creating array from this string using deliminator as : --->
+<cfset myArrayList2 = ListToArray(dataString,':')>
+<!--- looping thru array but displaying only line that has LB in it --->
+<cfloop array="#myArrayList2#" item="itm">
+<cfif findNoCase("LB", #itm#)>
+	<cfoutput>#itm#  </cfoutput>
+	     
+</cfif>
+		
+  
+</cfloop>
 
 
 
