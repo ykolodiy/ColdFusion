@@ -1,0 +1,10 @@
+1 create java class no main method > fuck.java
+suck(){sysout("u suck")}
+2 export to jar > jar -cf fuck.jar com/suck/fuck
+3 open the file > 7z l fuck.jar
+4 put it in > opt/ColdFusion/cfusion/wwwroot/WEB-INF/lib/
+5 restart CF server
+6 create cfm file
+<cfset obj = CreateObject("java", "com.utils.nsme" />
+<cfdump var="#obj#" > 
+<cfdump var="#obj.suck()#" > 
