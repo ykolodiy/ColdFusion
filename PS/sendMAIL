@@ -1,0 +1,27 @@
+1 create component CFC with 2 methods
+<cfcomponent>
+
+//configuration
+<cffunction name="sendMail" returntype="void" access="private" >
+<cfmail from="adm@sdf.com" subject="fuck" to="yuriw@ukr.net" >
+	"text in a message"
+</cfmail>
+</cffunction>
+
+
+//actually send email based on what u want
+<cffunction name="sent" >
+	<cfset sendMail() />
+</cffunction>
+
+
+</cfcomponent>
+
+2 in CFM file create instance if that componennt 
+<cfset p = createObject ('component', 'Testing.mail') />
+
+and run fucken method
+<cfset p.sent()>
+
+haha in Admin > Mail do setup of smtp server. u can use fakesmtp.jar file
+
