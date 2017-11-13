@@ -8,3 +8,12 @@ suck(){sysout("u suck")}
 <cfset obj = CreateObject("java", "com.utils.nsme" />
 <cfdump var="#obj#" > 
 <cfdump var="#obj.suck()#" > 
+
+
+/// call main method from another class?  yes
+package playground;
+import playground.ConractUs;
+public class test {
+	public static void main(String[] args) throws Exception {
+		ConractUs.main(new String[0]);}}
+///
