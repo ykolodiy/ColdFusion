@@ -33,6 +33,10 @@
   
 </cfloop>
 
+	<!---if u wanna send email   --->  
+	<cfset p = createObject ('component', 'Testing.mail') />
+<cfset p.sent()>
+
 
 
 </body>
