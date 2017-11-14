@@ -20,3 +20,22 @@ public class test {
 	public static void main(String[] args) throws Exception {
 		ConractUs.main(new String[0]);}}
 ///
+
+
+1
+public class JustClass {public String testJava() 
+	{ 
+	return "Hello from Java you little motherfucker"; 
+	} 
+}
+2 compile it .class
+3 move to ColdFusion\cfusion\wwwroot\WEB-INF\classes
+4 restart server
+5 create cfm 
+<cfobject type="java" class="JustClass" name="myObj"> 
+<cfset y = myObj.init()> 
+<cfoutput > 
+#y.testJava()# 
+</cfoutput>
+
+6 run cfm
