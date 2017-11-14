@@ -10,6 +10,9 @@ suck(){sysout("u suck")}
 <cfdump var="#obj.suck()#" > 
 
 
+or
+https://helpx.adobe.com/coldfusion/developing-applications/using-web-elements-and-external-objects/integrating-jee-and-java-elements-in-cfml-applications/enhanced-java-integration-in-coldfusion.html
+
 /// call main method from another class?  yes
 package playground;
 import playground.ConractUs;
