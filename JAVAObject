@@ -5,7 +5,7 @@ suck(){sysout("u suck")}
 4 put it in > opt/ColdFusion/cfusion/wwwroot/WEB-INF/lib/   //if jar file... but if class > (.class) file in web_root/WEB-INF/classes
 5 restart CF server
 6 create cfm file
-<cfset obj = CreateObject("java", "com.utils.nsme" />
+<cfset obj = createObject("java", "pathtoClass" />
 <cfdump var="#obj#" > 
 <cfdump var="#obj.suck()#" > 
 
