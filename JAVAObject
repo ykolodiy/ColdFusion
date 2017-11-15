@@ -5,6 +5,7 @@ suck(){sysout("u suck")}
 4 put it in > opt/ColdFusion/cfusion/wwwroot/WEB-INF/lib/   //if jar file... but if class > (.class) file in web_root/WEB-INF/classes
 5 restart CF server
 6 create cfm file
+<!---JustClass.java class is located in folder files in JAR archive rrr8.jar that is located in cfusion\wwwroot\WEB-INF\lib --->
 <cfset obj = createObject("java", "files.JustClass" />    OR   <cfobject type="java" class="files.JustClass" name="myObj">
 <cfdump var="#obj#" > 
 <cfdump var="#obj.suck()#" > 
