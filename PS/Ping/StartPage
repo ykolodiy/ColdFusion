@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+	
+	
+
+
+<cfset p = createObject ('component', 'TestingPing.Functions') />
+<cfset code = p.ping("https://www.pearsonschool.com/")>
+<cfoutput > #code# </cfoutput>
+
+
+<cfset title = p.title("https://www.pearsonschool.com/")>
+<cfoutput > #title# </cfoutput>
+</body>
+</html>
