@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>CF_Testing</title>
+</head>
+
+<body>
+	
+	
+
+
+<cfset p = createObject ('component', 'TestingPing.Functions') />
+
+
+
+<cfset myArray = ["https://www.pearsonschool.com/", "https://www.pearsonschool.com/index.cfm?locator=PS2vW2", "https://www.pearsonschool.com/index.cfm?locator=PSZu68", "https://www.pearsonschool.com/index.cfm?locator=PSZj4a", "https://www.pearsonhomeschool.com/index.cfm?locator=PS14Ct", "https://www.pearsonschool.com/index.cfm?locator=PS1gWt", "https://www.pearsonschool.com/index.cfm?locator=PS1t3p", "https://www.pearsonschool.com/index.cfm?locator=PS1zJo", "https://www.pearsonschool.com/index.cfm?locator=PSZ3Dd&elementType=Cart&csURL=http%3A%2F%2Fwww%2Epearsonschool%2Ecom%2Findex%2Ecfm&csURLVars=csu_locator%3DPSZ13f"] >
+<cfloop array="#myArray#" index="idx">
+	
+<cfset code = p.ping(#idx#)>
+<cfoutput > #code# </cfoutput>
+
+
+<cfset title = p.title(#idx#)>
+<cfoutput > #title# </cfoutput>
+   <cfoutput > <br> </cfoutput> 
+</cfloop>
+
+
+
+
+
+
+</body>
+</html>
