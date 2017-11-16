@@ -1,0 +1,42 @@
+<cfset myArray = ["https://www.pearsonschool.com/", "https://www.pearsonschool.com/index.cfm?locator=PS2vW2", "https://www.pearsonschool.com/index.cfm?locator=PSZu68", "https://www.pearsonschool.com/index.cfm?locator=PSZj4a", "https://www.pearsonhomeschool.com/index.cfm?locator=PS14Ct", "https://www.pearsonschool.com/index.cfm?locator=PS1gWt", "https://www.pearsonschool.com/index.cfm?locator=PS1t3p", "https://www.pearsonschool.com/index.cfm?locator=PS1zJo", "https://www.pearsonschool.com/index.cfm?locator=PSZ3Dd&elementType=Cart&csURL=http%3A%2F%2Fwww%2Epearsonschool%2Ecom%2Findex%2Ecfm&csURLVars=csu_locator%3DPSZ13f"] >
+<cfset myArray2 = ["Instructional Resources | K-12 Education Solutions | Pearson", "Instructional Resources | K-12 Education Solutions | Pearson", "Literacy Programs | Pearson | K-12 Literacy Curriculums", "Access - Pearson School", "Homeschool Curriculum: Textbooks, Materials, Lesson Plans & More - Pearson", "Access Codes - SS - Pearson School", "Private and Parochial", "Online Samples", "Shopping Cart - Pearson School"] >
+
+
+	
+	
+<cfloop index="i" from="1" to="#arrayLen(myArray)#"> 
+	
+ 
+ <cfset code = p.ping(#myArray[i]#)>
+<cfoutput > #code# </cfoutput>
+
+
+
+ <cfoutput>#myArray[i]#</cfoutput> 
+
+
+
+<!---<cfset title = p.title(#myArray[i]#)>  gets title from url --->
+<!---<cfoutput > #title# </cfoutput>    get title from url, dont need to print actually  --->
+
+
+
+<cfset assert = p.assert(#myArray[i]#, myArray2[#i#])>
+<!---<cfoutput > #assert# </cfoutput> need this for res variable compare 2 titles and code--->
+
+
+
+<cfif  #code# EQ "200 OK" && #assert# EQ "YES">
+	<cfset res = 'PASSED' >
+<cfelse>
+	<cfset res = 'FAILED' >
+	
+
+</cfif>
+
+<cfoutput > #res# </cfoutput>
+
+
+<cfoutput > <br> </cfoutput> 
+   
+</cfloop> 
