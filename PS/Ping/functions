@@ -1,0 +1,30 @@
+<cfcomponent>
+
+
+
+<cffunction name="ping"  >
+  <cfargument name="url1" type="String" required="true" >
+  
+ 
+ 
+     <cfhttp url="#arguments.url1#" method="get" result="result" redirect="true">
+         <!---<cfdump var="#result.Statuscode#" >--->
+         <cfreturn result.Statuscode >
+  </cffunction>
+
+
+
+
+<cffunction name="title" returntype="string" output="false">
+	<cfargument name="pageurl" type="string" required="true">
+	<cfhttp method="get" redirect="true" url="#arguments.pageurl#" throwonerror="true"></cfhttp>
+	<cfreturn ReReplace(cfhttp.fileContent, ".*<title>([^<>]*)</title>.*", "\1")>
+</cffunction>
+
+
+
+
+
+
+
+</cfcomponent>
