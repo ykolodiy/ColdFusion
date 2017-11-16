@@ -8,7 +8,7 @@
 <body>
 	
 	
-
+<cfset res = '' >
 
 <cfset p = createObject ('component', 'TestingPing.Functions') />
 
@@ -27,23 +27,39 @@
 <cfoutput > #code# </cfoutput>
 
 
+
  <cfoutput>#myArray[i]#</cfoutput> 
 
 
-<cfset title = p.title(#myArray[i]#)>
-<cfoutput > #title# </cfoutput>
+
+<!---<cfset title = p.title(#myArray[i]#)>  gets title from url --->
+<!---<cfoutput > #title# </cfoutput>    get title from url, dont need to print actually  --->
 
 
 
 <cfset assert = p.assert(#myArray[i]#, myArray2[#i#])>
-<cfoutput > #assert# </cfoutput>
 
-   <cfoutput > <br> </cfoutput> 
+<!---<cfoutput > #assert# </cfoutput> need this for res variable compare 2 titles and code--->
+
+<cfif  #code# EQ "200 OK" && #assert# EQ "YES">
+	<cfset res = 'PASSED' >
+<cfelse>
+	<cfset res = 'FAILED' >
+	
+
+</cfif>
+
+<cfoutput > #res# </cfoutput>
+
+
+<cfoutput > <br> </cfoutput> 
    
 </cfloop> 
 	
 	
-	
+	<cfif #res# EQ "FAILED">
+		<cfset p.sent()>
+	</cfif>
 	
 
 
