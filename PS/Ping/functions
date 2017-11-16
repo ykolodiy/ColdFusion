@@ -2,26 +2,50 @@
 
 
 
+
+<!--- this method receives responce code for given url as param --->
 <cffunction name="ping"  >
-  <cfargument name="url1" type="String" required="true" >
-  
- 
- 
-     <cfhttp url="#arguments.url1#" method="get" result="result" redirect="true">
-         <!---<cfdump var="#result.Statuscode#" >--->
-         <cfreturn result.Statuscode >
-  </cffunction>
+  <cfargument name="pageurl" type="String" required="true" >
+   <cfhttp url="#arguments.pageurl#" method="get" result="result" redirect="true">
+            <cfreturn result.Statuscode >
+</cffunction>
 
 
 
-
+<!--- this method gets url as param and return title, not used curently --->
 <cffunction name="title" returntype="string" output="false">
 	<cfargument name="pageurl" type="string" required="true">
-	<cfhttp method="get" redirect="true" url="#arguments.pageurl#" throwonerror="true"></cfhttp>
+	<cfhttp method="get" redirect="true" url="#arguments.pageurl#" ></cfhttp>
 	<cfreturn ReReplace(cfhttp.fileContent, ".*<title>([^<>]*)</title>.*", "\1")>
 </cffunction>
 
 
+
+<!--- this method gets 2 parameters, url and expected title, after that it gets actualt title anr return YES if 2 titles are equal --->
+<cffunction name="assert" returntype="boolean" output="false">
+	<cfargument name="pageurl" type="string" required="true">
+	<cfargument name="expectedtitle" type="string" required="true">
+	<cfhttp method="get" redirect="true" url="#arguments.pageurl#" ></cfhttp>
+	<cfset local.isNotConflict = objectEquals(#expectedtitle#, ReReplace(cfhttp.fileContent, ".*<title>([^<>]*)</title>.*", "\1"))> 
+	<cfreturn local.isNotConflict>
+</cffunction>
+
+
+
+
+
+
+
+<!---this methods prepares email --->
+<cffunction name="sendMail" returntype="void" access="private" >
+<cfmail from="cmrdmltv@gmail.com" subject="FAILED THIS ONE" to="yuriw@ukr.net" >
+	"simplerequest error"
+</cfmail>
+</cffunction>
+<!---this methods sends email --->
+<cffunction name="sent" >
+	<cfset sendMail() />
+</cffunction>
 
 
 
