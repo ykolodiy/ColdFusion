@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Test Vanity Urls</title>
+</head>
+
+<body>
+
+
+<cfset myFile="C:/tmp/vanityUrlsSmall.txt" />
+
+
+<cfif StructKeyExists(Cookie,"LastRow")>
+	<cfset LastRow = #cookie.LastRow#>
+	<cfset data=#cookie.Data#>
+	<cfoutput >
+		Cookie "LastRow" exist and last row : #LastRow-1# <br>#data#
+	</cfoutput>
+	<cfelse  >
+	<cfset LastRow = 0>
+	<cfset data="">
+</cfif>
+
+
+
+<cfset tickBegin = GetTickCount()> 
+<cfset tickBeginPlus5s = tickBegin+2000> 
+
+
+
+
+<cfloop file="#myFile#" index="i" from="#1+LastRow#"   item="line">
+    <cftry> 
+             <cfhttp url="#line#" result="result" method="GET"> </cfhttp> 	
+		     <cfoutput > #line# > #result.Responseheader.Status_Code#</cfoutput>
+		     
+		     
+		     
+		     
+		     <cfset  data = data & #line# & #result.Responseheader.Status_Code# & "<br>" >
+		    
+		    
+		    
+		    
+		    
+		     <cfoutput ><br></cfoutput>
+		     
+		     <cfif tickBeginPlus5s LT GetTickCount()>
+		     	<cfcookie
+                 name = "LastRow"
+                 value = "#i+LastRow#">
+		     	<cfcookie
+                 name = "Data"
+                 value = "#data#">
+                 
+                 
+                 
+		     	<cfbreak>  
+		     <cfelse>
+		     
+		   
+		     </cfif>
+		     
+		     
+       <cfcatch type = "Any"> </cfcatch>
+    </cftry> 
+</cfloop>
+
+
+</body>
+</html>
