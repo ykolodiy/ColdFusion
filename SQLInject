@@ -1,3 +1,24 @@
+<cfquery datasource="hdStreet" name="rsEvents">
+SELECT ID, NAME, STREET
+FROM TBL_EVENTS
+WHERE FLD_EVENTTIME > #now()#
+ORDER BY FLD_EVENTTIME ASC
+</cfquery>
+
+<cfif rsEvents.recordCount EQ 0>
+<p>sorry nothing </p>
+<cfelse>
+<cfoutput query="rsEvents"?
+<th>#NAME#</th>
+<th>#ID#</th>
+</cfoutput>
+</cfif>
+
+------------------------------------------------------
+
+
+
+
 SELECT
 FROM 
 WHERE id=#arguments.newsid#
