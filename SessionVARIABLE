@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Test Vanity Urls</title>
+</head>
+
+<body>
+
+
+<cfapplication name="qsErrorVals" clientmanagement="yes" sessionmanagement="yes" sessiontimeout="#createTimeSpan(0,0,360,0)#">
+<cflock timeout="120" scope="session" type="exclusive">
+    <cfset session.prop_st="888">
+   
+</cflock>
+ 
+ <cfhttp url="https://www.pearsonhomeschool.com/myworld" result="result" method="HEAD" redirect="false" > </cfhttp> 	
+ 
+ 
+ 
+ 
+ <cfdump var="#result#" >
+ 
+ <cfoutput >
+ 
+ 	#result.Responseheader.Location#
+ 	#session.prop_st#
+ </cfoutput>
+</body>
+</html>
