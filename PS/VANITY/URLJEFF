@@ -1,0 +1,97 @@
+<!---
+1) Render the output in an easy to work with CSV file. When we switch to using the DB the output will be to do UPDATE SQL queries.
+1) Pull Back HTTP Status Code (it does this already)
+2) Check to see if the final destination you're taken to is the same destination as defined in the tool (ie, if the tool is supposed to send pearsonschool.com/science to pearsonschool.com/index.cfm?locator=123456 but you actually wind up at pearsonschool.com/index.cfm?locator=abcdef we'd want to know that).
+3) Check to see if the final destination is in https or http (easy to check this - just have CF look at the url)
+4) Check to see if the final destination, if it's http, is capable of https (dont worry about this. we have functions that can check this.) 
+--->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Test Vanity Urls</title>
+</head>
+
+<body>
+
+
+<cfset myFile="C:/tmp/vanityUrlsSmall.txt" />
+
+
+
+
+<!--- Checking if some data stored in Cookies or not and it is the first run --->
+<cfif StructKeyExists(Cookie,"LastRow")>
+	<cfset LastRow = #cookie.LastRow#>
+    <cfset data="">
+    
+    <!--- if we have reached and of file Abort all operations --->
+    <cfif LastRow EQ "128">
+    	<cfabort>
+    </cfif>
+    
+    
+	<cfoutput >
+		Cookie "LastRow" exist and last row : #LastRow-1# <br>
+
+	</cfoutput>
+	<cfelse  >
+	<cfset LastRow = 0>
+	<cfset data="">
+</cfif>
+
+
+<!--- Getting time now and time after 2 seconds --->
+<cfset tickBegin = GetTickCount()> 
+<cfset tickBeginPlus5s = tickBegin+2000> 
+
+
+
+<!--- Looping thru all url in a file, Starting from Last Row if it available in a cookie --->
+<cfloop file="#myFile#" index="i" from="#1+LastRow#"   item="line">
+    <cftry>  
+             <cfhttp url="#line#" result="result" method="HEAD" redirect="false" > </cfhttp> 	
+             
+		     <cfoutput > #line# > #result.Responseheader.Status_Code# > #result.Responseheader.Location#</cfoutput>
+		 <br>
+		 <!--- Saving results in var data to save it in file later when loop is done or break --->
+		  <cfset  data = data & #line# & #result.Responseheader.Status_Code# & #result.Responseheader.Location# & #chr(13)# & #chr(10)#>
+		  
+		  
+
+		     <!--- If 5 sec passed Stopping looping and saving 2 cookies var last row and data --->
+		     <cfif tickBeginPlus5s LT GetTickCount()>
+		     	<cfcookie
+                 name = "LastRow"
+                 value = "#i+LastRow#">
+		   <!--- Exit the loop --->
+		     	<cfbreak>  
+		    </cfif>
+		     
+		     <cfif #line# EQ "https://www.pearsonschool.com/adobecs4 ">
+		     	
+		     	<cfcookie
+                 name = "LastRow"
+                 value = "128">
+		     	
+		     </cfif>
+		     
+		     
+		     
+   
+       <cfcatch type="Any">   </cfcatch>
+    </cftry> 
+</cfloop>
+
+
+  <!--- Saving this requests results to file --->
+	<cffile action="append"
+	file="C:\tmp\myfile.csv"
+	output="#data#">
+	
+	
+
+</body>
+</html>
+
