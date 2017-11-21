@@ -1,0 +1,18 @@
+Application.cfm
+
+<cfapplication name=“myname”>
+<cfset application.countnum = 0>
+
+or even database
+<cfset application.ds = “datasource”>
+<cfset application.dsuser = “username>
+<cfset application.dspass = “password>
+
+
+
+
+
+Index.cfm
+
+<cfoutput> #application.countnum#</cfouput>
+<cfdumb var=“#application#”>
