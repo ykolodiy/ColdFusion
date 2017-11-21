@@ -39,6 +39,12 @@
 	<cfelse  >
 	<cfset LastRow = 0>
 	<cfset data="">
+	<!--- create new file and rewrite existing --->
+	<cffile action="write"
+	file="C:\tmp\myfile.csv"
+	output="">
+	
+	
 </cfif>
 
 
@@ -48,14 +54,21 @@
 
 
 
-<!--- Looping thru all url in a file, Starting from Last Row if it available in the cookie --->
+<!--- Looping thru all url in the file, Starting from Last Row if it available in the cookie --->
 <cfloop file="#myFile#" index="i" from="#1+LastRow#" to="#len(myFile)#"  item="line">
     <cftry>  
-             <cfhttp url="#line#" result="result" method="HEAD" redirect="false" > </cfhttp> 	
-              <cfhttp url="#line#" result="result2" method="HEAD" redirect="true" > </cfhttp> 
+    	<!--- this request doesnt redirects but gets redirect url --->
+             <cfhttp url="#line#" result="result" method="HEAD" redirect="false" > </cfhttp> 
+        <!--- this requests redirects and get status code --->	
+             <cfhttp url="#line#" result="result2" method="HEAD" redirect="true" > </cfhttp> 
+            
+            <!--- Some vanity url has no redirection we need to catch this ---> 
+          <cfif NOT StructKeyExists( result.Responseheader, "Location" )> 
+                  	<cfset result.Responseheader.Location="" > </cfif>
+         
              
-		     <cfoutput > #line# > #result2.Responseheader.Status_Code# > #result.Responseheader.Location#</cfoutput>
-		 <br>
+          <cfoutput > #line# > #result2.Responseheader.Status_Code# > #result.Responseheader.Location#</cfoutput><br>
+	
 		     <!--- Saving results in var data to save it in file later when loop is done or break --->
 		  <cfset  data = data & #line# &">"& #result2.Responseheader.Status_Code# &">"&#result.Responseheader.Location# & #chr(13)# & #chr(10)#>
 		  
@@ -81,7 +94,7 @@
 		     
 		     
    
-       <cfcatch type="Any"> <cfdump var="#cfcatch#" />  </cfcatch>
+       <cfcatch type="Any"> <cfdump var="#cfcatch#" /> </cfcatch>
     </cftry> 
 </cfloop>
 
