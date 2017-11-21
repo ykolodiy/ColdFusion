@@ -1,0 +1,15 @@
+<!--- here the list of vanity urls --->
+<cfset myFile="C:/tmp/pscrat_vanity_urls.csv" />
+
+<cfset object = structNew() >
+<cfset array = ArrayNew(1)>
+
+<cfloop file="#myFile#" index="i"  item="line">
+	<cfset array[i] = listToArray (#line#, ",",true)>
+	<cfset object[i] = array[i] >
+	
+</cfloop>
+
+<!---<cfdump var="#object#" >--->
+
+<cfdump var="#object[333][2]#" >
