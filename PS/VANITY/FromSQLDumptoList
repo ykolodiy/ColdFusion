@@ -3,9 +3,6 @@
 
 
 <cftry>
-	
-
-
 
 <cfset array = ArrayNew(1)>
 
@@ -30,20 +27,25 @@
 Length: <cfdump var="#arrayLen(array)#">
 <cfloop from="1" to="#ArrayLen(array)#" index="i">
 	<cfset VANITY="https:" & Replace(#array[i][2]#,'"','','All') >
-	<cfset DEST="https:" & Replace(#array[i][4]#,'"','','All') >
 	<cfset DEST0=Replace(#array[i][4]#,'"','','All') >
 	<cfset PROGRAMID="https://www.pearsonschool.com/redirect.cfm?programId=" & Replace(#array[i][3]#,'"','','All') >
-		<cfset DEST1="https://www.pearsonschool.com/" & Replace(#array[i][4]#,'"','','All') >
-	<cfif DEST neq "https:" && NOT REFindNoCase("^https:index.cfm", DEST) && NOT REFindNoCase("^https:http", DEST) && NOT REFindNoCase("^https: http", DEST)>
-		<cfoutput>#VANITY#,#DEST# </cfoutput><br>
-		<cfelseif REFindNoCase("^https:index.cfm", DEST) >
-		<cfoutput>#VANITY#,#DEST1# </cfoutput><br>
-		<cfelseif REFindNoCase("^https:http", DEST) AND REFindNoCase("^https: http", DEST)>
-		<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
-			<cfelseif REFindNoCase("^https: http", DEST)>
-		<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
+	
+	<cfif REFindNoCase("^//www", DEST0)>
+		<cfoutput>#VANITY#, https:#DEST0# </cfoutput><br>
+	
+	
+	<cfelseif  REFindNoCase("^http", DEST0)>
+	<cfoutput>#VANITY#, #DEST0# </cfoutput><br>
+	
+	
+	<cfelseif  REFindNoCase("^index.cfm", DEST0)>
+	<cfoutput>#VANITY#,  https://www.pearsonschool.com/#DEST0# </cfoutput><br>
+	
 		<cfelse>
-		<cfoutput>#VANITY#,#PROGRAMID# </cfoutput><br>
-	</cfif >
+			<cfoutput>#VANITY#,#PROGRAMID# </cfoutput><br>
+		
+	</cfif>
+	
+
 	
 </cfloop>
