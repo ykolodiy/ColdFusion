@@ -1,0 +1,133 @@
+<!---
+0) Render the output in an easy to work with CSV file. When we switch to using the DB the output will be to do UPDATE SQL queries.
+1) Pull Back HTTP Status Code (it does this already)
+2) Check to see if the final destination you're taken to is the same destination as defined in the tool (ie, if the tool is supposed to send pearsonschool.com/science to pearsonschool.com/index.cfm?locator=123456 but you actually wind up at pearsonschool.com/index.cfm?locator=abcdef we'd want to know that).
+3) Check to see if the final destination is in https or http (easy to check this - just have CF look at the url)
+4) Check to see if the final destination, if it's http, is capable of https (dont worry about this. we have functions that can check this.) 
+--->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Test Vanity Urls</title>
+</head>
+
+<body>
+
+<!--- here the list of vanity urls in ARRAY --->
+<cfset myFile="C:/tmp/vanity.csv" />
+<cftry>
+<cfset array = ArrayNew(1)>
+<cfloop file="#myFile#" index="i"  item="line">
+	<cfset array[i] = listToArray (#line#, ",",true)>
+</cfloop>
+<cfcatch >
+	<cfdump var="#cfcatch#" >
+</cfcatch>
+</cftry>
+Length: <cfdump var="#arrayLen(array)#" ><br>
+
+
+
+
+
+
+
+
+
+
+<!--- Checking if some data stored in Cookies or not and it is the first run --->
+<cfif StructKeyExists(Cookie,"LastRow")>
+	<cfset LastRow = #cookie.LastRow#>
+    <cfset data="">
+    
+    <!--- if we have reached and of THE file Abort all operations --->
+    <cfif LastRow EQ "#arrayLen(array)#">
+    	<cfoutput >
+    		#len(myFile)# END of FILE <br>
+    	</cfoutput>
+    	<cfabort>
+    </cfif>
+    
+    
+	<!--- if cookie doesnt exist lastrow eq 0 data 0 and create new file --->
+	<cfelse >
+	<cfset LastRow = 0>
+	<cfset data="">
+	<!--- create new file and rewrite existing if its first time running --->
+	<cffile action="write"
+	file="C:\tmp\myfile.csv"
+	output="">	
+</cfif>
+
+
+<!--- Getting time now and time after 5 seconds --->
+<cfset tickBegin = GetTickCount()> 
+<cfset tickBeginPlus5s = tickBegin+5000> 
+
+
+
+
+<cfloop from="#1+LastRow#" to="500" index="i">
+	
+	
+		   <cftry>  
+    	<!--- this request doesnt redirects but gets redirect url --->
+             <cfhttp url="#array[i][1]#" result="result" method="HEAD" redirect="false" />
+        <!--- this requests redirects and get status code --->	
+             <cfhttp url="#array[i][1]#" result="result2" method="HEAD" redirect="true" />  
+            
+            <!--- Some vanity url has no redirection we need to catch this ---> 
+          <cfif NOT StructKeyExists( result.Responseheader, "Location" )> 
+                  	<cfset result.Responseheader.Location="" > </cfif>
+         
+         
+         <cfif #array[i][2]# EQ #result.Responseheader.Location# >
+         	<cfset locationEqual = "YES" >
+         	<cfelse>
+         	<cfset locationEqual = "NO" >
+         </cfif>
+             
+          <cfoutput > #array[i][1]# > #result2.Responseheader.Status_Code# > #locationEqual#</cfoutput><br>
+	
+		    <!--- Saving results in var data to save it in file later when loop is done or break --->
+		  <cfset  data = data & #array[i][1]# &">"& #result2.Responseheader.Status_Code# & ">" & #locationEqual# & #chr(13)# & #chr(10)#>
+		  
+		  
+
+       <cfcatch type="Any"> <cfdump var="#cfcatch#" /> </cfcatch>
+    </cftry> 
+
+	
+	
+		     <!--- If 5 sec passed Stopping looping and saving cookies "lastrow" --->
+		     <cfif tickBeginPlus5s LT GetTickCount()>
+		     	<cfcookie
+                 name = "LastRow"
+                 value = "#i+LastRow#">
+             <!--- Exit the loop --->
+		     	<cfbreak>  
+		    </cfif>
+		     
+		     <!--- if 5 seconds didnt pass but we looped thru the whole file need to set cookie Actual lasrow --->
+		     <cfif "#i+LastRow#" EQ "#arrayLen(array)#">
+		     	<cfcookie
+                 name = "LastRow"
+                 value = "#i+LastRow#">
+		     	
+		     </cfif>
+</cfloop>
+
+
+
+  <!--- Saving this requests results to file --->
+	<cffile action="append"
+	file="C:\tmp\myfile.csv"
+	output="#data#">
+	
+	
+
+</body>
+</html>
+
