@@ -15,7 +15,7 @@
 
 <body>
 
-<!--- here the list of vanity urls in ARRAY --->
+<!--- here is the list of vanity urls in ARRAY --->
 <cfset myFile="C:/tmp/vanity2.csv" />
 <cftry>
 <cfset array = ArrayNew(1)>
@@ -35,16 +35,16 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
     <cfset data="">
     
     <!--- if we have reached and of THE file Abort all operations --->
-    <cfif LastRow EQ "#arrayLen(array)#">
+    <cfif LastRow GTE "#arrayLen(array)#">
     	<cfoutput >
-    		#len(myFile)# END of FILE <br>
+    		#arrayLen(array)# END of the FILE <br>
     	</cfoutput>
     <!--- ABORT --->
     	<cfabort>
     </cfif>
     
     
-	<!--- if cookie doesnt exist lastrow eq 0 data 0 and create new file --->
+	<!--- if cookie doesnt exist lastrow eq 0 data 0 and create new file to write results --->
 	<cfelse >
 	<cfset LastRow = 0>
 	<cfset data="">
@@ -54,14 +54,18 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
 	output="">	
 </cfif>
 
+<!--- Setting lastline variable to use it in the loop and finish loop after last line reached --->
+<cfif 1+LastRow+10 GT arrayLen(array)>
+	<cfset lastline = arrayLen(array)>
+	<cfelse>
+	<cfset lastline = 1+LastRow+10>
+</cfif>
 
-
-
-
-<cfloop from="#1+LastRow#" to="#1+LastRow+10#" index="i">
+<!--- Lets start loop thru 10 urls in the row --->
+<cfloop from="#1+LastRow#" to="#lastline#" index="i">
 	
 		   <cftry>  
-    	<!--- this request doesnt redirects but gets redirect url --->
+	<!--- this request doesnt redirects but gets redirect url "result.Responseheader.Location"--->
              <cfhttp url="#array[i][1]#" result="result" method="HEAD" redirect="false" />
         <!--- this requests redirects and get status code --->	
              <cfhttp url="#array[i][1]#" result="result2" method="HEAD" redirect="true" />  
@@ -70,6 +74,7 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
           <cfif NOT StructKeyExists( result.Responseheader, "Location" )> 
                   	<cfset result.Responseheader.Location="" > </cfif>
          
+         <!--- Here we check if final url is the same as expected --->
          <cfif findoneof (#array[i][2]#, #result.Responseheader.Location#)>
          	<cfset locationEqual = "YES" >
          <cfelse>
@@ -91,10 +96,10 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
 		     
 		   
 </cfloop>
-<!--- save cookie after loop --->
+<!--- save cookie after the loop --->
 				<cfcookie
                  name = "LastRow"
-                 value = "#1+LastRow+10#">
+                 value = "#lastline#">
 
   <!--- Saving this requests results to file --->
 	<cffile action="append"
