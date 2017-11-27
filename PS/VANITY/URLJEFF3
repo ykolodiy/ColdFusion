@@ -16,7 +16,7 @@
 <body>
 
 <!--- here the list of vanity urls in ARRAY --->
-<cfset myFile="C:/tmp/vanity.csv" />
+<cfset myFile="C:/tmp/vanity2.csv" />
 <cftry>
 <cfset array = ArrayNew(1)>
 <cfloop file="#myFile#" index="i"  item="line">
@@ -29,14 +29,6 @@
 Length: <cfdump var="#arrayLen(array)#" ><br>
 
 
-
-
-
-
-
-
-
-
 <!--- Checking if some data stored in Cookies or not and it is the first run --->
 <cfif StructKeyExists(Cookie,"LastRow")>
 	<cfset LastRow = #cookie.LastRow#>
@@ -47,6 +39,7 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
     	<cfoutput >
     		#len(myFile)# END of FILE <br>
     	</cfoutput>
+    <!--- ABORT --->
     	<cfabort>
     </cfif>
     
@@ -62,15 +55,10 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
 </cfif>
 
 
-<!--- Getting time now and time after 5 seconds --->
-<cfset tickBegin = GetTickCount()> 
-<cfset tickBeginPlus5s = tickBegin+5000> 
 
 
 
-
-<cfloop from="#1+LastRow#" to="500" index="i">
-	
+<cfloop from="#1+LastRow#" to="#1+LastRow+10#" index="i">
 	
 		   <cftry>  
     	<!--- this request doesnt redirects but gets redirect url --->
@@ -82,11 +70,11 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
           <cfif NOT StructKeyExists( result.Responseheader, "Location" )> 
                   	<cfset result.Responseheader.Location="" > </cfif>
          
-         
-         <cfif #array[i][2]# EQ #result.Responseheader.Location# >
+         <cfif findoneof (#array[i][2]#, #result.Responseheader.Location#)>
          	<cfset locationEqual = "YES" >
-         	<cfelse>
+         <cfelse>
          	<cfset locationEqual = "NO" >
+         	
          </cfif>
              
           <cfoutput > #array[i][1]# > #result2.Responseheader.Status_Code# > #locationEqual#</cfoutput><br>
@@ -100,26 +88,13 @@ Length: <cfdump var="#arrayLen(array)#" ><br>
     </cftry> 
 
 	
-	
-		     <!--- If 5 sec passed Stopping looping and saving cookies "lastrow" --->
-		     <cfif tickBeginPlus5s LT GetTickCount()>
-		     	<cfcookie
-                 name = "LastRow"
-                 value = "#i+LastRow#">
-             <!--- Exit the loop --->
-		     	<cfbreak>  
-		    </cfif>
 		     
-		     <!--- if 5 seconds didnt pass but we looped thru the whole file need to set cookie Actual lasrow --->
-		     <cfif "#i+LastRow#" EQ "#arrayLen(array)#">
-		     	<cfcookie
-                 name = "LastRow"
-                 value = "#i+LastRow#">
-		     	
-		     </cfif>
+		   
 </cfloop>
-
-
+<!--- save cookie after loop --->
+				<cfcookie
+                 name = "LastRow"
+                 value = "#1+LastRow+10#">
 
   <!--- Saving this requests results to file --->
 	<cffile action="append"
