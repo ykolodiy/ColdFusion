@@ -7,7 +7,7 @@
 <cfset array = ArrayNew(1)>
 
 <cfloop file="#myFile#" index="i"  item="line">
-	<cfset array[i] = listToArray (#line#, ",",true)>
+<cfset array[i] = listToArray (#line#, ",",true)>
 </cfloop>
 
 <!---Length: <cfdump var="#arrayLen(array)#" >
@@ -30,24 +30,11 @@ Length: <cfdump var="#arrayLen(array)#">
 	<cfset DEST0=Replace(#array[i][4]#,'"','','All') >
 	<cfset PROGRAMID=Replace(#array[i][3]#,'"','','All') >
 	
-	<cfif REFindNoCase("^//", DEST0)>
-		<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
-	
-	
-	<cfelseif  REFindNoCase("^http", DEST0)>
-	<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
-	
-	
-	<cfelseif  REFindNoCase("^index", DEST0)>
-	<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
-	
-		<cfelseif  REFindNoCase("^/index", DEST0)>
-	<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
-	
-	
+	<cfif DEST0 EQ "">
+		<cfoutput>#VANITY#,#PROGRAMID# </cfoutput><br>
+
 		<cfelse>
-			<cfoutput>#VANITY#,#PROGRAMID# </cfoutput><br>
-		
+				<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
 	</cfif>
 	
 
