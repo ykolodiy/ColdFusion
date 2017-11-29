@@ -1,147 +1,112 @@
-//result like this: https://www.pearsonschool.com/ilsecondary > 404 > YES > YES
+<!---
+0) Render the output in an easy to work with CSV file. When we switch to using the DB the output will be to do UPDATE SQL queries.
+1) Pull Back HTTP Status Code (it does this already)
+2) Check to see if the final destination you're taken to is the same destination as defined in the tool (ie, if the tool is supposed to send pearsonschool.com/science to pearsonschool.com/index.cfm?locator=123456 but you actually wind up at pearsonschool.com/index.cfm?locator=abcdef we'd want to know that).
+3) Check to see if the final destination is in https or http (easy to check this - just have CF look at the url)
+4) Check to see if the final destination, if it's http, is capable of https (dont worry about this. we have functions that can check this.) 
+--->
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Test Vanity Urls</title>
+</head>
+<cfinclude template='sslChecker.cfm'>
+<body>
 
+<!--- here is the list of vanity urls in ARRAY --->
+<cfset myFile="C:/tmp/vanity2.csv" />
+<cftry>
+<cfset array = ArrayNew(1)>
+<cfloop file="#myFile#" index="i"  item="line">
+	<cfset array[i] = listToArray (#line#, ",",true)>
+</cfloop>
+<cfcatch >
+	<cfdump var="#cfcatch#" >
+</cfcatch>
+</cftry>
 
-
-<!---Grab the response header for the given URL and check in the last url http or https.--->
-<cffunction name='httporhttps' returntype='string'>
-<cfargument name='urlx' type='string' required>
-	
-	
-	
-<cfhttp
-    method="head"
-    url="#urlx#"
-    useragent="#CGI.http_user_agent#"
-    result="objGet1"
-    <!--- Do not follow redirects. --->
-    redirect="false"
-    />
-
-
-<cfif StructKeyExists( objGet1.ResponseHeader, "Location" ) >
-	<!--- set correct url 2  --->
-					<cfif REFindNoCase("^/redirect", objGet1.ResponseHeader.Location)>
-					<cfset url2 = "https://www.pearsonschool.com"&"#objGet1.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^//", objGet1.ResponseHeader.Location)>
-					<cfset url2 = "https:"&"#objGet1.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^index", objGet1.ResponseHeader.Location)>
-					<cfset url2 = "https://www.pearsonschool.com/"&"#objGet1.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^/index", objGet1.ResponseHeader.Location)>
-					<cfset url2 = "https://www.pearsonschool.com"&"#objGet1.ResponseHeader.Location#">
-						<cfelse>
-					<cfset url2 = objGet1.ResponseHeader.Location>
-					</cfif>
-	
-	<!---<cfoutput >#url2#</cfoutput> <br>--->
-	
-	<cfhttp
-        method="get"
-        url=#url2#
-        result="objGet2"
-        redirect="false"
-         useragent="#CGI.http_user_agent#"
-        />
-	
-	  
-	
-	
-	<cfif StructKeyExists( objGet2.ResponseHeader, "Location" )>
-	<!--- set correct url 3  --->
-					<cfif REFindNoCase("^/redirect", objGet2.ResponseHeader.Location)>
-					<cfset url3 = "https://www.pearsonschool.com"&"#objGet2.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^//", objGet2.ResponseHeader.Location)>
-					<cfset url3 = "https:"&"#objGet2.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^index", objGet2.ResponseHeader.Location)>
-					<cfset url3 = "https://www.pearsonschool.com/"&"#objGet2.ResponseHeader.Location#">
-						<cfelseif  REFindNoCase("^/index", objGet2.ResponseHeader.Location)>
-					<cfset url3 = "https://www.pearsonschool.com"&"#objGet2.ResponseHeader.Location#">
-						<cfelse>
-					<cfset url3 = objGet2.ResponseHeader.Location>
-					</cfif>
-	
-	<!---<cfoutput >#url3#</cfoutput><br>--->
-
-		<cfhttp
-        method="get"
-        url=#url3#
-        result="objGet3"
-        redirect="false"
-         useragent="#CGI.http_user_agent#"
-        />
-        
-      
-      <cfif StructKeyExists( objGet3.ResponseHeader, "Location" )>
-   <!--- set correct url 4  --->
-					<cfif REFindNoCase("^/redirect", objGet3.ResponseHeader.Location)>
-					<cfset url4 = "https://www.pearsonschool.com"&"#objGet3.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^//", objGet3.ResponseHeader.Location)>
-					<cfset url4 = "https:"&"#objGet3.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^index", objGet3.ResponseHeader.Location)>
-					<cfset url4 = "https://www.pearsonschool.com/"&"#objGet3.ResponseHeader.Location#">
-							<cfelseif  REFindNoCase("^/index", objGet3.ResponseHeader.Location)>
-					<cfset url4 = "https://www.pearsonschool.com"&"#objGet3.ResponseHeader.Location#">
-						<cfelse>
-					<cfset url4 = objGet3.ResponseHeader.Location>
-					</cfif>
-	
-<!---	<cfoutput >#url4#</cfoutput><br>--->
-
-	<cfhttp
-        method="get"
-        url=#url4#
-        result="objGet4"
-        redirect="false"
-         useragent="#CGI.http_user_agent#"
-        />
-        
-      
-		      <cfif StructKeyExists( objGet4.ResponseHeader, "Location" )>
-		   <!--- set correct url 4  --->
-							<cfif REFindNoCase("^/redirect", objGet4.ResponseHeader.Location)>
-							<cfset url5 = "https://www.pearsonschool.com"&"#objGet4.ResponseHeader.Location#">
-							<cfelseif  REFindNoCase("^//", objGet4.ResponseHeader.Location)>
-							<cfset url5 = "https:"&"#objGet4.ResponseHeader.Location#">
-							<cfelseif  REFindNoCase("^index", objGet4.ResponseHeader.Location)>
-							<cfset url5 = "https://www.pearsonschool.com/"&"#objGet4.ResponseHeader.Location#">
-								<cfelseif  REFindNoCase("^/index", objGet4.ResponseHeader.Location)>
-							<cfset url5 = "https://www.pearsonschool.com"&"#objGet4.ResponseHeader.Location#">
-								<cfelse>
-							<cfset url5 = objGet4.ResponseHeader.Location>
-							</cfif>
-																  <cfelse>
-									           <cfif REFindNoCase("^https", #url4#)>
-												<cfreturn "YES">
-												<cfelse>
-												<cfreturn "NO">
-												        </cfif>
-				</cfif>
-
-      		  <cfelse>
-          								<cfif REFindNoCase("^https", #url3#)>
-										<cfreturn "YES">
-										<cfelse>
-										<cfreturn "NO">
-										</cfif>
-      </cfif>
-
-              <cfelse>
-										        <cfif REFindNoCase("^https", #url2#)>
-										<cfreturn "YES">
-										<cfelse>
-							
-										<cfreturn "NO">
-										        </cfif>
-
-	</cfif>
-
-	 <cfelse>
-<cfreturn "NE">
-     
+<!--- Checking if some data stored in Cookies or not and it is the first run --->
+<cfif StructKeyExists(Cookie,"LastRow")>
+	<cfset LastRow = #cookie.LastRow#>
+    <cfset data="">
+    
+    <!--- if we have reached and of THE file Abort all operations --->
+    <cfif LastRow GTE "#arrayLen(array)#">
+    	<cfoutput >
+    		#arrayLen(array)# END of the FILE <br>
+    	</cfoutput>
+    <!--- ABORT --->
+    	<cfabort>
+    </cfif>
+    
+    
+	<!--- if cookie doesnt exist lastrow eq 0 data 0 and create new file to write results --->
+	<cfelse >
+	<cfset LastRow = 0>
+	<cfset data="">
+	<!--- create new file and rewrite existing if its first time running --->
+	<cffile action="write"
+	file="C:\tmp\myfile.csv"
+	output="">	
 </cfif>
 
+<!--- Setting lastline variable to use it in the loop and finish loop after last line reached --->
+<cfif 1+LastRow+10 GT arrayLen(array)>
+	<cfset lastline = arrayLen(array)>
+	<cfelse>
+	<cfset lastline = 1+LastRow+10>
+</cfif>
 
+<!--- Lets start loop thru 10 urls in the row --->
+<cfloop from="#1+LastRow#" to="#lastline#" index="i">
+	
+		   <cftry>  
+	<!--- this request doesnt redirects but gets redirect url "result.Responseheader.Location"--->
+             <cfhttp url="#array[i][1]#" result="result" method="HEAD" redirect="false" />
+        <!--- this requests redirects and get status code --->	
+             <cfhttp url="#array[i][1]#" result="result2" method="HEAD" redirect="true" />  
+            
+            <!--- Some vanity url has no redirection we need to catch this ---> 
+          <cfif NOT StructKeyExists( result.Responseheader, "Location" )> 
+                  	<cfset result.Responseheader.Location="" > </cfif>
+         
+         <!--- Here we check if final url is the same as expected --->
+         <cfif findoneof (#array[i][2]#, #result.Responseheader.Location#)>
+         	<cfset locationEqual = "YES" >
+         <cfelse>
+         	<cfset locationEqual = "NO" >
+         	
+         </cfif>
+             
+          <cfoutput > #array[i][1]# > #result2.Responseheader.Status_Code# > #locationEqual# > #httporhttps(array[i][1])#</cfoutput><br>
+	
+		    <!--- Saving results in var data to save it in file later when loop is done or break --->
+		  <cfset  data = data & #array[i][1]# &">"& #result2.Responseheader.Status_Code# & ">" & #locationEqual# & #httporhttps(array[i][1])# &  #chr(13)# & #chr(10)#>
+		  
+		  
 
+       <cfcatch type="Any"> <cfdump var="#cfcatch#" /> </cfcatch>
+    </cftry> 
+	   
+</cfloop>
+<!--- save cookie after the loop --->
+				<cfcookie
+                 name = "LastRow"
+                 value = "#lastline#">
 
+  <!--- Saving this requests results to file --->
+	<cffile action="append"
+	file="C:\tmp\myfile.csv"
+	output="#data#">
+	
+	
+	
+	<cfoutput >
+		tested #lastline# from #arrayLen(array)#
+	</cfoutput>
 
-</cffunction>
+</body>
+</html>
+
