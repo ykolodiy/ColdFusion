@@ -1,5 +1,0 @@
-<cfinclude template='yesorno.cfm'>
-<cfset yesorno = httporhttps("https://www.pearsonschool.com/aypvideo")>
-<cfoutput >
-	#yesorno#
-</cfoutput>
