@@ -1,0 +1,142 @@
+
+<!---Grab the response header for the given URL and check in lasy url if it http or https.--->
+<cffunction name='httporhttps' returntype='string'>
+<cfargument name='urlx' type='string' required>
+	
+	
+	
+<cfhttp
+    method="head"
+    url="#urlx#"
+    useragent="#CGI.http_user_agent#"
+    result="objGet1"
+    <!--- Do not follow redirects. --->
+    redirect="false"
+    />
+
+
+<cfif StructKeyExists( objGet1.ResponseHeader, "Location" ) >
+	<!--- set correct url 2  --->
+					<cfif REFindNoCase("^/redirect", objGet1.ResponseHeader.Location)>
+					<cfset url2 = "https://www.pearsonschool.com"&"#objGet1.ResponseHeader.Location#">
+					<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet1.ResponseHeader.Location)>
+					<cfset url2 = "https:"&"#objGet1.ResponseHeader.Location#">
+					<cfelseif  REFindNoCase("^index", objGet1.ResponseHeader.Location)>
+					<cfset url2 = "https://www.pearsonschool.com/"&"#objGet1.ResponseHeader.Location#">
+						<cfelse>
+					<cfset url2 = objGet1.ResponseHeader.Location>
+					</cfif>
+	
+	<!---<cfoutput >#url2#</cfoutput> <br>--->
+	
+	<cfhttp
+        method="get"
+        url=#url2#
+        result="objGet2"
+        redirect="false"
+         useragent="#CGI.http_user_agent#"
+        />
+	
+	  
+	
+	
+	<cfif StructKeyExists( objGet2.ResponseHeader, "Location" )>
+	<!--- set correct url 3  --->
+					<cfif REFindNoCase("^/redirect", objGet2.ResponseHeader.Location)>
+					<cfset url3 = "https://www.pearsonschool.com"&"#objGet2.ResponseHeader.Location#">
+					<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet2.ResponseHeader.Location)>
+					<cfset url3 = "https:"&"#objGet2.ResponseHeader.Location#">
+					<cfelseif  REFindNoCase("^index", objGet2.ResponseHeader.Location)>
+					<cfset url3 = "https://www.pearsonschool.com/"&"#objGet2.ResponseHeader.Location#">
+						<cfelse>
+					<cfset url3 = objGet2.ResponseHeader.Location>
+					</cfif>
+	
+	<!---<cfoutput >#url3#</cfoutput><br>--->
+
+		<cfhttp
+        method="get"
+        url=#url3#
+        result="objGet3"
+        redirect="false"
+         useragent="#CGI.http_user_agent#"
+        />
+        
+      
+      <cfif StructKeyExists( objGet3.ResponseHeader, "Location" )>
+   <!--- set correct url 4  --->
+					<cfif REFindNoCase("^/redirect", objGet3.ResponseHeader.Location)>
+					<cfset url4 = "https://www.pearsonschool.com"&"#objGet3.ResponseHeader.Location#">
+					<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet3.ResponseHeader.Location)>
+					<cfset url4 = "https:"&"#objGet3.ResponseHeader.Location#">
+					<cfelseif  REFindNoCase("^index", objGet3.ResponseHeader.Location)>
+					<cfset url4 = "https://www.pearsonschool.com/"&"#objGet3.ResponseHeader.Location#">
+						<cfelse>
+					<cfset url4 = objGet3.ResponseHeader.Location>
+					</cfif>
+	
+<!---	<cfoutput >#url4#</cfoutput><br>--->
+
+	<cfhttp
+        method="get"
+        url=#url4#
+        result="objGet4"
+        redirect="false"
+         useragent="#CGI.http_user_agent#"
+        />
+        
+      
+		      <cfif StructKeyExists( objGet4.ResponseHeader, "Location" )>
+		   <!--- set correct url 4  --->
+							<cfif REFindNoCase("^/redirect", objGet4.ResponseHeader.Location)>
+							<cfset url5 = "https://www.pearsonschool.com"&"#objGet4.ResponseHeader.Location#">
+							<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet4.ResponseHeader.Location)>
+							<cfset url5 = "https:"&"#objGet4.ResponseHeader.Location#">
+							<cfelseif  REFindNoCase("^index", objGet4.ResponseHeader.Location)>
+							<cfset url5 = "https://www.pearsonschool.com/"&"#objGet4.ResponseHeader.Location#">
+								<cfelse>
+							<cfset url5 = objGet4.ResponseHeader.Location>
+							</cfif>
+			
+			<cfoutput >#url5#</cfoutput><br>
+										  <cfelse>
+									           <cfif REFindNoCase("^https", #url4#)>
+												<cfreturn "YES">
+												<cfelse>
+												<cfreturn "NO">
+												        </cfif>
+				</cfif>
+
+      		  <cfelse>
+          								<cfif REFindNoCase("^https", #url3#)>
+										<cfreturn "YES">
+										<cfelse>
+										<cfreturn "NO">
+										</cfif>
+      </cfif>
+
+        <cfelse>
+										        <cfif REFindNoCase("^https", #url2#)>
+										<cfreturn "YES">
+										<cfelse>
+										
+										<cfoutput >
+											#url2#
+										</cfoutput>
+										<cfreturn "NO">
+										        </cfif>
+        
+     
+     
+	</cfif>
+
+	 <cfelse>
+<cfreturn "NE">
+     
+</cfif>
+
+
+
+
+
+</cffunction>
