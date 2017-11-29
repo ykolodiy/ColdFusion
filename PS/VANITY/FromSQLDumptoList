@@ -28,18 +28,22 @@ Length: <cfdump var="#arrayLen(array)#">
 <cfloop from="1" to="#ArrayLen(array)#" index="i">
 	<cfset VANITY="https:" & Replace(#array[i][2]#,'"','','All') >
 	<cfset DEST0=Replace(#array[i][4]#,'"','','All') >
-	<cfset PROGRAMID="https://www.pearsonschool.com/redirect.cfm?programId=" & Replace(#array[i][3]#,'"','','All') >
+	<cfset PROGRAMID=Replace(#array[i][3]#,'"','','All') >
 	
-	<cfif REFindNoCase("^//www", DEST0)>
-		<cfoutput>#VANITY#, https:#DEST0# </cfoutput><br>
+	<cfif REFindNoCase("^//", DEST0)>
+		<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
 	
 	
 	<cfelseif  REFindNoCase("^http", DEST0)>
-	<cfoutput>#VANITY#, #DEST0# </cfoutput><br>
+	<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
 	
 	
-	<cfelseif  REFindNoCase("^index.cfm", DEST0)>
-	<cfoutput>#VANITY#,  https://www.pearsonschool.com/#DEST0# </cfoutput><br>
+	<cfelseif  REFindNoCase("^index", DEST0)>
+	<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
+	
+		<cfelseif  REFindNoCase("^/index", DEST0)>
+	<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
+	
 	
 		<cfelse>
 			<cfoutput>#VANITY#,#PROGRAMID# </cfoutput><br>
