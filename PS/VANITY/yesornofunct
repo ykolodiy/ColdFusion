@@ -19,10 +19,12 @@
 	<!--- set correct url 2  --->
 					<cfif REFindNoCase("^/redirect", objGet1.ResponseHeader.Location)>
 					<cfset url2 = "https://www.pearsonschool.com"&"#objGet1.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet1.ResponseHeader.Location)>
+					<cfelseif  REFindNoCase("^//", objGet1.ResponseHeader.Location)>
 					<cfset url2 = "https:"&"#objGet1.ResponseHeader.Location#">
 					<cfelseif  REFindNoCase("^index", objGet1.ResponseHeader.Location)>
 					<cfset url2 = "https://www.pearsonschool.com/"&"#objGet1.ResponseHeader.Location#">
+					<cfelseif  REFindNoCase("^/index", objGet1.ResponseHeader.Location)>
+					<cfset url2 = "https://www.pearsonschool.com"&"#objGet1.ResponseHeader.Location#">
 						<cfelse>
 					<cfset url2 = objGet1.ResponseHeader.Location>
 					</cfif>
@@ -44,10 +46,12 @@
 	<!--- set correct url 3  --->
 					<cfif REFindNoCase("^/redirect", objGet2.ResponseHeader.Location)>
 					<cfset url3 = "https://www.pearsonschool.com"&"#objGet2.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet2.ResponseHeader.Location)>
+					<cfelseif  REFindNoCase("^//", objGet2.ResponseHeader.Location)>
 					<cfset url3 = "https:"&"#objGet2.ResponseHeader.Location#">
 					<cfelseif  REFindNoCase("^index", objGet2.ResponseHeader.Location)>
 					<cfset url3 = "https://www.pearsonschool.com/"&"#objGet2.ResponseHeader.Location#">
+						<cfelseif  REFindNoCase("^/index", objGet2.ResponseHeader.Location)>
+					<cfset url3 = "https://www.pearsonschool.com"&"#objGet2.ResponseHeader.Location#">
 						<cfelse>
 					<cfset url3 = objGet2.ResponseHeader.Location>
 					</cfif>
@@ -67,10 +71,12 @@
    <!--- set correct url 4  --->
 					<cfif REFindNoCase("^/redirect", objGet3.ResponseHeader.Location)>
 					<cfset url4 = "https://www.pearsonschool.com"&"#objGet3.ResponseHeader.Location#">
-					<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet3.ResponseHeader.Location)>
+					<cfelseif  REFindNoCase("^//", objGet3.ResponseHeader.Location)>
 					<cfset url4 = "https:"&"#objGet3.ResponseHeader.Location#">
 					<cfelseif  REFindNoCase("^index", objGet3.ResponseHeader.Location)>
 					<cfset url4 = "https://www.pearsonschool.com/"&"#objGet3.ResponseHeader.Location#">
+							<cfelseif  REFindNoCase("^/index", objGet3.ResponseHeader.Location)>
+					<cfset url4 = "https://www.pearsonschool.com"&"#objGet3.ResponseHeader.Location#">
 						<cfelse>
 					<cfset url4 = objGet3.ResponseHeader.Location>
 					</cfif>
@@ -90,16 +96,16 @@
 		   <!--- set correct url 4  --->
 							<cfif REFindNoCase("^/redirect", objGet4.ResponseHeader.Location)>
 							<cfset url5 = "https://www.pearsonschool.com"&"#objGet4.ResponseHeader.Location#">
-							<cfelseif  REFindNoCase("^//www.pearsonschool.com", objGet4.ResponseHeader.Location)>
+							<cfelseif  REFindNoCase("^//", objGet4.ResponseHeader.Location)>
 							<cfset url5 = "https:"&"#objGet4.ResponseHeader.Location#">
 							<cfelseif  REFindNoCase("^index", objGet4.ResponseHeader.Location)>
 							<cfset url5 = "https://www.pearsonschool.com/"&"#objGet4.ResponseHeader.Location#">
+								<cfelseif  REFindNoCase("^/index", objGet4.ResponseHeader.Location)>
+							<cfset url5 = "https://www.pearsonschool.com"&"#objGet4.ResponseHeader.Location#">
 								<cfelse>
 							<cfset url5 = objGet4.ResponseHeader.Location>
 							</cfif>
-			
-			<cfoutput >#url5#</cfoutput><br>
-										  <cfelse>
+																  <cfelse>
 									           <cfif REFindNoCase("^https", #url4#)>
 												<cfreturn "YES">
 												<cfelse>
@@ -115,19 +121,16 @@
 										</cfif>
       </cfif>
 
-        <cfelse>
+              <cfelse>
 										        <cfif REFindNoCase("^https", #url2#)>
 										<cfreturn "YES">
 										<cfelse>
-										
-										<cfoutput >
-											#url2#
-										</cfoutput>
+								<cfoutput >
+									#url2#
+								</cfoutput>
 										<cfreturn "NO">
 										        </cfif>
-        
-     
-     
+
 	</cfif>
 
 	 <cfelse>
