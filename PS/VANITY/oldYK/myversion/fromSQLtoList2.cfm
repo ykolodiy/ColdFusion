@@ -1,0 +1,42 @@
+<!--- here the list of vanity urls --->
+<cfset myFile="C:/tmp/pscrat_vanity_urls.csv" />
+
+
+<cftry>
+
+<cfset array = ArrayNew(1)>
+
+<cfloop file="#myFile#" index="i"  item="line">
+<cfset array[i] = listToArray (#line#, ",",true)>
+</cfloop>
+
+<!---Length: <cfdump var="#arrayLen(array)#" >
+<cfdump var="#array[333]#" >
+<cfdump var="#array[333][2]#" >
+
+<cfdump var="#array[333][3]#" >  use program id if no redirect url in [4]    www.pearsonschool.com/redirect.cfm?programId=34062
+<cfdump var="#array[333][4]#" >--->
+
+
+<cfcatch >
+	<cfdump var="#cfcatch#" >
+</cfcatch>
+</cftry>
+
+
+Length: <cfdump var="#arrayLen(array)#">
+<cfloop from="1" to="#ArrayLen(array)#" index="i">
+	<cfset VANITY="https:" & Replace(#array[i][2]#,'"','','All') >
+	<cfset DEST0=Replace(#array[i][4]#,'"','','All') >
+	<cfset PROGRAMID=Replace(#array[i][3]#,'"','','All') >
+	
+	<cfif DEST0 EQ "">
+		<cfoutput>#VANITY#,#PROGRAMID# </cfoutput><br>
+
+		<cfelse>
+				<cfoutput>#VANITY#,#DEST0# </cfoutput><br>
+	</cfif>
+	
+
+	
+</cfloop>
