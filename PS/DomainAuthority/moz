@@ -1,0 +1,53 @@
+<cftry>
+	
+<cfscript>
+ 	  function hexToBase64( String hexValue ){
+        var binaryValue = binaryDecode( hexValue, "hex" );
+        var base64Value = binaryEncode( binaryValue, "base64" );
+        return( base64Value );
+    }
+ </cfscript>
+ 
+ 
+
+<!---Get your access id and secret key here: https://moz.com/products/api/keys --->
+<cfset accessID = "" />
+<cfset secretKey = "" />
+
+<!---Set your expires times for several minutes into the future --->
+<!---An expires time excessively far in the future will not be honored by the Mozscape API. --->
+<cfset expires = #round(getTickCount() /1000)# +300  />
+
+<!---Put each parameter on a new line --->
+<cfset stringToSign = accessID & chr(10) & expires />
+
+<!---Get the "raw" or binary output of the hmac hash --->
+<cfset binarySignature = hmac(stringToSign, secretKey, "HMACSHA1") />
+
+
+<!---Base64-encode it and then url-encode that --->
+<cfset urlSafeSignature = urlEncodedFormat(hexToBase64(binarySignature)) />
+
+<!---Specify the URL that you want link metrics for --->
+<cfset objectURL = "www.pearsonschool.com" />
+
+<!---Add up all the bit flags you want returned. Learn more here: https://moz.com/help/guides/moz-api/mozscape/api-reference/url-metrics--->
+<cfset cols = "103079215108" />
+
+<!---Put it all together and you get your request URL. This example uses the Mozscape URL Metrics API --->
+<cfset requestUrl = "http://lsapi.seomoz.com/linkscape/url-metrics/"&encodeForURL(objectURL)&"?Cols="&cols&"&AccessID="&accessID&"&Expires="&expires&"&Signature="&urlSafeSignature />
+
+
+
+<!---send request --->
+<cfhttp result="result" method="get"  url=#requestUrl# />
+
+<!---result --->
+<cfoutput >
+	#result.Filecontent#
+</cfoutput>
+
+<cfcatch type="any">
+	<cfdump var="#cfcatch#" >
+</cfcatch>
+</cftry>
