@@ -1,0 +1,79 @@
+<cfscript>
+    function base64ToHex( String base64Value ){
+        var binaryValue = binaryDecode( base64Value, "base64" );
+        var hexValue = binaryEncode( binaryValue, "hex" );
+        return( lcase( hexValue ) );
+    }
+    function base64ToString( String base64Value ){
+        var binaryValue = binaryDecode( base64Value, "base64" );
+        var stringValue = toString( binaryValue );
+        return( stringValue );
+    }
+    function hexToBase64( String hexValue ){
+        var binaryValue = binaryDecode( hexValue, "hex" );
+        var base64Value = binaryEncode( binaryValue, "base64" );
+        return( base64Value );
+    }
+    function hexToString( String hexValue ){
+        var binaryValue = binaryDecode( hexValue, "hex" );
+        var stringValue = toString( binaryValue );
+        return( stringValue );
+    }
+    function stringToBase64( String stringValue ){
+        var binaryValue = stringToBinary( stringValue );
+        var base64Value = binaryEncode( binaryValue, "base64" );
+        return( base64Value );
+    }
+    function stringToBinary( String stringValue ){
+        var base64Value = toBase64( stringValue );
+        var binaryValue = toBinary( base64Value );
+        return( binaryValue );
+    }
+    function stringToHex( String stringValue ){
+        var binaryValue = stringToBinary( stringValue );
+        var hexValue = binaryEncode( binaryValue, "hex" );
+        return( lcase( hexValue ) );
+    }
+    // ------------------------------------------------------ //
+    // ------------------------------------------------------ //
+    // ------------------------------------------------------ //
+    // ------------------------------------------------------ //
+    // Let's create a string value to test with.
+    message = "Danger zone!";
+    writeOutput( "Original :: " & message );
+    writeOutput( "<br />" );
+    // Now, let's check to the String-to-XXX conversions.
+    writeOutput( "<br />" );
+    messageAsHex = stringToHex( message );
+    writeOutput( "Hex :: " & messageAsHex );
+    writeOutput( "<br />" );
+    messageAsBase64 = stringToBase64( message );
+    writeOutput( "Base64 :: " & messageAsBase64 );
+    writeOutput( "<br />" );
+    messageAsBinary = stringToBinary( message );
+    writeOutput( "Binary :: [B" & arrayLen( messageAsBinary ) );
+    writeOutput( "<br />" );
+    // Now let's try converting back to string.
+    writeOutput( "<br />" );
+    hexToMessage = hexToString( messageAsHex );
+    writeOutput( "From Hex :: " & hexToMessage );
+    writeOutput( "<br />" );
+    base64ToMessage = base64ToString( messageAsBase64 );
+    writeOutput( "From Base64 :: " & base64ToMessage );
+    writeOutput( "<br />" );
+    binaryToMessage = toString( messageAsBinary );
+    writeOutput( "From Binary :: " & binaryToMessage );
+    writeOutput( "<br />" );
+    // Now let's just test the cross-encoding conversions.
+    writeOutput( "<br />" );
+    check = stringToHex( message );
+    check = hexToBase64( check );
+    check = base64ToString( check );
+    writeOutput( "Check 1 :: " & check );
+    writeOutput( "<br />" );
+    check = stringToBase64( message );
+    check = base64ToHex( check );
+    check = hexToString( check );
+    writeOutput( "Check 2 :: " & check );
+    writeOutput( "<br />" );
+</cfscript>
