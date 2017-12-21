@@ -1,0 +1,31 @@
+// i in administrator add orackle database
+<cfquery datasource="myoracledatabase" name="res">
+	SELECT * FROM Persons
+</cfquery>
+
+<table >
+	
+
+<cfoutput query="res">
+	<tr>
+		<td >
+			#res.personid#
+		</td>
+			<td >
+				#res.lastname#
+		</td>
+			<td	 >
+			#res.firstname#
+		</td>
+			<td >
+				#res.city#
+		</td>
+			<td >
+				#res.address#
+		</td>
+	</tr>
+	
+	
+</cfoutput>
+
+</table>
