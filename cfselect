@@ -1,0 +1,14 @@
+<cfquery datasource="myoracledatabase" name="res">
+	SELECT * FROM Persons
+</cfquery>
+
+	<cfform name="fn">
+	<cfselect 
+        name = "employeeid"
+                query = "res"
+                display ="city"> 
+       
+    </cfselect> 
+
+	</cfform>
+
