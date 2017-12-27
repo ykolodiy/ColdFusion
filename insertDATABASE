@@ -9,9 +9,6 @@ FROM
 // run id submit pressed
 <cfif isDefined="form.insetTour"
 
-
-
-
 INSERT:
 <cfquery
 INSERT INTO TOURS (ID,NAME)
