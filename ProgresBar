@@ -1,0 +1,36 @@
+<script type="text/javascript" >
+	function startp (barname) {
+		ColdFusion.ProgressBar.show(barname);
+				ColdFusion.ProgressBar.start(barname);
+	}
+	
+	function onfinish(){
+		
+		alert("fuck");
+	}
+</script>
+
+
+
+
+<cfform >
+	<p>
+		<cfinput type="button" name="startbar" value="start" onclick="startp('durationbar')"></p> <bR>
+		
+	<p>
+		<cfprogressbar name="durationbar" duration="5000" interval="1000" width="600" oncomplete="onfinish" autodisplay="false" >
+	</p>
+	
+	____________________________
+	
+	manual <bR>
+	
+	<a href="javascript:ColdFusion.ProgressBar.updateStatus('manualbar', 0.25, 'step 1');" > step 1 </a>
+	<a href="javascript:ColdFusion.ProgressBar.updateStatus('manualbar', 0.5, 'step 2');" > step 2 </a>
+	<a href="javascript:ColdFusion.ProgressBar.updateStatus('manualbar', 0.75, 'step 3');" > step 3 </a>
+	<a href="javascript:ColdFusion.ProgressBar.updateStatus('manualbar', 1, 'step 4');" > step 4 </a>
+	
+		<cfprogressbar name="manualbar" duration="5000"  width="600" oncomplete="onfinish"  >
+	
+	
+</cfform>
