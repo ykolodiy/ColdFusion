@@ -1,0 +1,38 @@
+
+
+<!--- open the file containing the words --->
+<cfset wordsFilePath = "C:\Users\vkoloyu\CF\ColdFusion\cfusion\wwwroot\Testing\Play\words.txt" />
+
+
+<cfform action = "words.cfm" name = "form1">
+	ENG<cfinput name="word1"  type="text" maxlength="20" message ="Enter English word"><br>
+	UKR<cfinput name="word2"  type="text" maxlength="20" message ="Enter Ukrainian word"><br>
+	<cfinput name="submit"  type="submit">
+</cfform>
+
+
+
+<!--- loop through 10 lines of the file --->
+<cfloop file="#wordsFilePath#"  index="i"  item="currentLine" charset = "utf-8">
+	
+	<cfset wordsArray        = listToArray(currentLine, ",") />
+	<cfset eng                   = wordsArray[1] />
+	<cfset ukr                   = wordsArray[2] />
+
+<cfoutput >
+	#i# : #eng# > #ukr# <bR>
+</cfoutput>
+</cfloop>
+
+
+
+	<cfif IsDefined("FORM.WORD1")>
+		<cfoutput >
+			new word: 	#FORM.WORD1#
+		</cfoutput>
+		
+		<cfset new = #FORM.WORD1# & "," & #FORM.WORD2#   />
+		
+	<!--- append results to file --->
+<cffile action="append" file="C:\Users\vkoloyu\CF\ColdFusion\cfusion\wwwroot\Testing\Play\words.txt" charset = "utf-8" output="#new#" />
+	</cfif>
