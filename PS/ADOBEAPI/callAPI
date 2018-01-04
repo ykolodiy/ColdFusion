@@ -1,0 +1,24 @@
+<cfset username = "">
+	<cfset password = "" >
+	<cfset created = "#dateformat(now(), "yyyy-mm-dd")#T#TimeFormat(now(), "HH:nn:ss")#Z" >
+	<cfset nonce =  Hash(rand(), "MD5")  >
+	<cfset base64nonce = toBase64(nonce) >
+	<cfset password_digest = toBase64(Hash(nonce & created & password, "SHA"))>
+	<cfset data = serializeJSON({ 'search'= '', 'types' = '[ "standard","rollup" ]'  } )>
+	<cfset u= "https://api5.omniture.com/admin/1.4/rest/?method=Company.GetReportSuites" >
+		
+
+<cfhttp url="#u#" method="post"  result ="result" >
+       
+    <cfhttpparam type="header" name="Content-type" value="application/json"/>
+    <cfhttpparam type="header" name="X-WSSE: UsernameToken" value="" >
+		<cfhttpparam type="header" name="Username" value="#username#" >
+		<cfhttpparam type="header" name="PasswordDigest" value="#password_digest#" >
+		<cfhttpparam type="header" name="Nonce" value="#nonce#" >
+		<cfhttpparam type="header" name="Created" value="#created#" >
+    
+    <cfhttpparam type="body" value="#data#"/> 
+		
+</cfhttp>
+
+<cfdump var="#result#" >
