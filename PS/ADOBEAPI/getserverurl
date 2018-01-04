@@ -1,0 +1,12 @@
+<cfset data = serializeJSON({ 'company' = 'cdegroot'} )>
+
+<cfhttp url="https://api.omniture.com/admin/1.4/rest/?method=Company.GetEndpoint" method="post"  result ="result" >
+       
+        <cfhttpparam type="header" name="Content-type" value="application/json" >
+
+    	<cfhttpparam type="body" value="#data#"/> 
+		
+</cfhttp>
+
+
+<cfdump var="#result#" >
