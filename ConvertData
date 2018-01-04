@@ -1,3 +1,14 @@
+PHP > md5(string,TRUE)
+TRUE - Raw 16 character binary format
+FALSE - Default. 32 character hex number
+in Coldfusion
+<cfset nonce1 =  Hash(string, "MD5")  >   like FALSE E46FAD84135D7C1C0DE5F9E33BF115B5
+but need convert to
+<cfset nonce = toString(binaryDecode( nonce1, "hex" )) />   like TRUE  �o��]| ���;�� 
+
+
+
+
 <cfscript>
     function base64ToHex( String base64Value ){
         var binaryValue = binaryDecode( base64Value, "base64" );
