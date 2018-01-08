@@ -1,0 +1,47 @@
+
+<!--- Windows Example ---> 
+<!--- Check to see if the Form variable exists. ---> 
+<cfif isDefined("Form.FileContents") > 
+    <!--- If TRUE, upload the file. ---> 
+    
+    <cftry>
+    	
+    
+    <cffile action = "upload"  
+        fileField = "FileContents"  
+        destination = "C:\tmp\chromeos\"  
+        accept = "application/pdf"  
+        nameConflict = "MakeUnique"> 
+        
+        <cfcatch type="any">
+        	Error, is it PDF file?
+        </cfcatch>
+       </cftry> 
+        
+        
+<cfelse> 
+    <!--- If FALSE, show the Form. ---> 
+    <form method="post" 
+        action="<cfoutput>#cgi.script_name#</cfoutput>"  
+        name="uploadForm" enctype="multipart/form-data"> 
+        <input name="FileContents" type="file"> 
+       
+        <input name="submit" type="submit" value="Upload File">  
+    </form> 
+</cfif>
+
+_____________________________
+
+<cfparam name="form.fileUpload" default="">
+
+<cfif len(trim(form.fileUpload))>
+  <cffile action="upload"
+     fileField="fileUpload"
+     destination="C:\docs">
+  <p>Thankyou, your file has been uploaded.</p>
+</cfif>
+
+<form enctype="multipart/form-data" method="post">
+  <input type="file" name="fileUpload" /><br />
+  <input type="submit" value="Upload File" />
+</form>
