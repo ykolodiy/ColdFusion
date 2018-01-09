@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"
+  integrity="sha256-0YPKAwZP7Mp3ALMRVB2i8GXeEndvCq3eSl/WsAl1Ryk="
+  crossorigin="anonymous"></script>
+  
+<script>
+$(document).ready(function(){
+    $("#sortable").sortable();
+  });
+
+$(document).ready(function(){
+    $("#sortable1").sortable();
+     $("#saveBtn").click(persist8)
+  });
+  
+function persist8() {
+    console.log('running persist....');
+    var data = $("#sortable1").sortable('serialize');
+    console.log(data)
+}
+  
+</script>
+</head>
+
+<body>
+
+<h1>Test</h1>
+
+<ul id="sortable">
+    <li>First</li>
+    <li>Second</li>
+    <li>Third</li>
+</ul>
+
+<cfset data = queryNew("id,title","integer,varchar")>
+<cfloop index="x" from="1" to="5">
+    <cfset queryAddRow(data)>
+    <cfset querySetCell(data, "id", x)>
+    <cfset querySetCell(data, "title", "Title #x#")>
+</cfloop>
+
+<ul id="sortable1">
+    <cfoutput query="data">
+        <li id="item_#id#">#title#</li>
+    </cfoutput>
+</ul>
+
+<input type="button" id="saveBtn" value="Persist">
+
+
+</body>
+
+</html>
