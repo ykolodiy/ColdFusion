@@ -1,6 +1,6 @@
 1 create java class no main method > fuck.java
 suck(){sysout("u suck")}
-2 export to jar > jar -cf fuck.jar com/suck/fuck
+2 export to jar > jar -cf fuck.jar com/suck/fuck.java
 3 open the file > 7z l fuck.jar
 4 put it in > opt/ColdFusion/cfusion/wwwroot/WEB-INF/lib/   //if jar file... but if class > (.class) file in web_root/WEB-INF/classes
 5 restart CF server
