@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table {
+    width: 100%;    
+    background-color: #f1f1c1;
+}
+</style>
+</head>
+<body>
+
+
+
+
+<cfquery datasource="myoracledatabase" name="LS_DOMAINS">
+	SELECT * FROM LS_DOMAINS
+</cfquery>
+
+
+<table >
+  <tr>
+    <th>ID</th>
+    <th>Root domain</th> 
+     <th>Date created</th> 
+      <th>Date updated</th> 
+       <th>Date expires</th> 
+  </tr>
+  
+  <cfoutput query="LS_DOMAINS">
+  <tr>
+    <td>#LS_DOMAINS.id#</td>
+    <td>#LS_DOMAINS.root_domain#</td>
+    <td>#LS_DOMAINS.date_created#</td>
+    <td>#LS_DOMAINS.date_updated#</td>
+    <td>#LS_DOMAINS.date_expires#</td>
+  </tr>
+  </cfoutput>
+  
+</table>
+
+</body>
+</html>
