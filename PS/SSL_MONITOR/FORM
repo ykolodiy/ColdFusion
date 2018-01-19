@@ -15,11 +15,18 @@
 		<!--- Lets check if aErrorMessages empty? --->
 		<cfif ArrayIsEmpty(aErrorMessages)>
 			<!---goon on form process coz no error --->
+			
+			<!---EXAMPLE INSERT INTO "SYSTEM"."LS_CERTIFICATES" (ID, DOMAIN_ID, SUB_DOMAIN_ID, DATE_EXPIRES) VALUES ('2', '1', '2', TO_TIMESTAMP('2018-01-29 17:49:07.766000000', 'YYYY-MM-DD HH24:MI:SS.FF'))
+ --->
+			
 			<cfquery datasource="myoracledatabase">
 				INSERT INTO LS_DOMAINS 
 				(ID, ROOT_DOMAIN, DATE_CREATED, DATE_UPDATED, DATE_EXPIRES)
 				VALUES 
-				('#form.id#', '#form.RootDomain#', #form.DateCreated#, #form.DateUpdated#, #form.DateExpires#)
+				('#form.id#', '#form.RootDomain#', 
+				<cfqueryparam value="#form.DateCreated#" cfsqltype="cf_sql_timestamp">,
+				<cfqueryparam value="#form.DateUpdated#" cfsqltype="cf_sql_timestamp" null="true" >,
+				<cfqueryparam value="#form.DateExpires#" cfsqltype="cf_sql_timestamp">)
 			</cfquery>
 			
 			<!---feedback --->
@@ -56,15 +63,14 @@ th, td {
 	</cfoutput>
 </cfif>
 
-
 <cfif isDefined('domainisinserted')>
-DATA INSERTED
-	<cfelse>
-
-
+<cfset structClear(form)>
+<cfset domainisinserted = false>
+<cflocation url="Forms.cfm">
+</cfif>
 
 <cfform id="insertLSDOMAINS" name= "insertLSDOMAINS" method="post" >
-	 <fieldset style="display: inline-block">	 <legend>INSERT data to LS_DOMAINS table</legend>
+<fieldset style="display: inline-block">	 <legend>INSERT data to LS_DOMAINS table</legend>
 <table style="width:auto">
 
   <tr>
@@ -74,27 +80,27 @@ DATA INSERTED
   </tr>
   <tr>
     <td>ID:</td>
-    <td><cfinput type="text" name="id"  required="true" message = "ID can not be empty" ></td>
+    <td><input type="text" name="id"  required ></td>
    
   </tr>
   <tr>
     <td>Root Domain:</td>
-    <td><cfinput type="text" name="RootDomain" size="35" required="true" message = "Root Domain can not be empty"  /> </td>
+    <td><input type="text" name="RootDomain" size="35" required /> </td>
   
   </tr>
   <tr>
-    <td>Date created:</td>
+    <td>Date Created:</td>
     <td> <input type="date" name="DateCreated" min="2017-01-01" required  /></td>
  
   </tr>
   
     <tr>
-    <td>Date updated:</td>
+    <td>Date Updated:</td>
     <td> <input type="date" name="DateUpdated" min="2017-01-01"  /></td>
   
   </tr>
   <tr>
-    <td>Date expires:</td>
+    <td>Date Expires:</td>
     <td><input type="date"  name="DateExpires" min="2017-01-01" required /></td>
  
   </tr>
@@ -104,9 +110,6 @@ DATA INSERTED
   <cfinput type="submit" name="SubmitLSDOMAINS" value="Submit">
    </fieldset>
 </cfform> 
-
-</cfif>
-
 
 </body>
 </html>
