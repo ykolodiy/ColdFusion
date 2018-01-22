@@ -16,6 +16,8 @@ th, td {
 
 <body>
 
+
+
 <!---Form processing Script --->
 <cfif structKeyExists(form, 'SubmitLSDOMAINS')>
 	<!--- Start server side data validation --->
@@ -41,11 +43,11 @@ th, td {
 				UPDATE LS_DOMAINS 
 				SET 
 				ROOT_DOMAIN = '#form.RootDomain#',
-				DATE_CREATED = '#form.DateCreated#',
-				DATE_UPDATED = '#form.DateUpdated#',
-				DATE_EXPIRES = '#form.DateExpires#'
+				DATE_CREATED = <cfqueryparam value="#form.DateCreated#" cfsqltype="cf_sql_timestamp">,
+				DATE_UPDATED = <cfqueryparam value="#form.DateUpdated#" cfsqltype="cf_sql_timestamp">,
+				DATE_EXPIRES = <cfqueryparam value="#form.DateExpires#" cfsqltype="cf_sql_timestamp">
 				WHERE
-				ID = #form.id#
+				ID = <cfqueryparam value="#form.id#" cfsqltype="CF_SQL_NUMERIC">
 			</cfquery>
 			
 			<!---feedback --->
@@ -55,24 +57,20 @@ th, td {
 
 
 
-
-
-
-
-
-
 <cfif structKeyExists(variables, 'domainupdated') AND variables.domainupdated >
 	UPDATED <br>
 </cfif>
 
 
-
+<cfif isDefined("url.domainid") AND url.domainid NEQ '' >
+	
+<cfset domainid = url.domainid />
 
 
 
 <cfquery datasource="myoracledatabase" name="LS">
 	SELECT * FROM LS_DOMAINS
-	WHERE ID=10
+	WHERE ID=#domainid#
 </cfquery>
 
 
@@ -118,5 +116,7 @@ th, td {
    </fieldset>
 </cfform> 
 
+
+</cfif>
 </body>
 </html>
