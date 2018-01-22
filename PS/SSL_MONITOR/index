@@ -22,29 +22,29 @@ table {
 
 
 <cfquery datasource="myoracledatabase" name="LS">
-SELECT LS_DOMAINS.root_domain, LS_SUB_DOMAINS.sub_domain, LS_DOMAINS.date_expires DA, LS_CERTIFICATES.date_expires SA
+SELECT LS_DOMAINS.root_domain, LS_SUB_DOMAINS.sub_domain, LS_DOMAINS.date_expires DA, LS_CERTIFICATES.date_expires SA, LS_DOMAINS.ID DI
 FROM ((LS_DOMAINS
 INNER JOIN LS_SUB_DOMAINS ON LS_DOMAINS.id = LS_SUB_DOMAINS.domain_id)
 INNER JOIN LS_CERTIFICATES ON LS_DOMAINS.id = LS_CERTIFICATES.domain_id)
 </cfquery>
 
 
-<cfdump var="#LS#" >
+<!---<cfdump var="#LS#" >--->
 
 
 <table >
   <tr>
-    <th>Edit</th>
-    <th>Root domain</th> 
-     <th>Sub Domain</th> 
-      <th>Domain Expires</th> 
-       <th>SSL Certificate Expires</th> 
-          <th>Compare</th> 
+	    <th>Edit</th>
+	    <th>Root domain</th> 
+	    <th>Sub Domain</th> 
+	    <th>Domain Expires</th> 
+	    <th>SSL Certificate Expires</th> 
+	    <th>Compare</th> 
   </tr>
   
   <cfoutput query="LS">
   <tr>
-    <td>Edit</td>
+    <td><a href="http://127.0.0.1:8600/Testing/SSL_PROJECT/Edit.cfm?domainid=#DI#">Edit</a></td>
     <td>#LS.root_domain#</td>
     <td>#LS.sub_domain#</td>
     <td>#LS.DA#</td>
@@ -55,6 +55,37 @@ INNER JOIN LS_CERTIFICATES ON LS_DOMAINS.id = LS_CERTIFICATES.domain_id)
   </cfoutput>
   
 </table>
+
+<br><br>
+
+<a href="Forms.cfm">INSERT to LS_DOMAINS</a><br><br>
+<a href="Update_LS_Domain.cfm">UPDATE LS_DOMAINS</a><br><br>
+
+	
+	<cfquery datasource="myoracledatabase" name="LS_DOMAINS">
+	SELECT * FROM LS_DOMAINS
+</cfquery>
+	
+	
+<cfform name="fn" >
+	<cfselect 
+	onchange="go(this.value)"
+                name = "updateip"
+                query = "LS_DOMAINS"
+                value="ID"
+                display ="root_domain" 
+                queryPosition="below"> 
+        <option value="">Update Domain...</option>
+    </cfselect> 
+	</cfform>
+
+
+<script >
+	function go (id){
+		window.location.href = "http://127.0.0.1:8600/Testing/SSL_PROJECT/Update_LS_Domain.cfm?domainid="+id;
+		
+	}
+</script>
 
 </body>
 </html>
