@@ -1,3 +1,21 @@
+RAILO on TOMCAT
+
+https://github.com/getrailo/railo/wiki/Installation:-JAR-File-Deployment
+
+http://localhost:5555/cf/railo-context/admin/web.cfm 
+
+
+
+
+
+
+
+or
+
+
+
+
+
 Installing RAILO with Tomcat apache in window.
 
 1. Download war version of Railo.
