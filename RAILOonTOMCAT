@@ -2,10 +2,10 @@ RAILO on TOMCAT
 
 https://github.com/getrailo/railo/wiki/Installation:-JAR-File-Deployment
 
-http://localhost:5555/cf/railo-context/admin/web.cfm 
+http://localhost:5555/railo-context/admin/web.cfm 
 
 
-
+http://localhost:5555/railo-context/admin/server.cfm?action=services.mail
 
 
 
