@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table {
+    width: 100%;    
+    background-color: #f1f1c1;
+}
+</style>
+</head>
+<body>
+
+<h2>SSL Certificate Tool</h2>
+
+<cfquery datasource="pschool" name="LS">
+SELECT LS_DOMAINS.ROOT_DOMAIN RD,  LS_DOMAINS.DATE_EXPIRES DA, LS_SUB_DOMAINS.SUB_DOMAIN SD, LS_CERTIFICATES.DATE_EXPIRES SA, LS_DOMAINS.ID DI
+FROM ((LS_DOMAINS
+INNER JOIN LS_SUB_DOMAINS ON LS_DOMAINS.ID = LS_SUB_DOMAINS.DOMAIN_ID)
+INNER JOIN LS_CERTIFICATES ON LS_SUB_DOMAINS.ID = LS_CERTIFICATES.SUB_DOMAIN_ID)
+</cfquery>
+
+
+<cfif isDefined("url.edit")>
+ 
+    <cfif structKeyExists(form, 'SubmitEDITED')>
+    <!--goon on form process and update 2 tables -->
+      <cfquery datasource="pschool">
+        UPDATE LS_DOMAINS 
+        SET 
+        DATE_EXPIRES = <cfqueryparam value="#form.DomainDateExpires#" cfsqltype="cf_sql_timestamp">,
+        DATE_UPDATED = <cfqueryparam value="#form.DomainDateUpdated#" cfsqltype="cf_sql_timestamp">
+        WHERE
+        ROOT_DOMAIN =  <cfqueryparam value="#form.RootDomain#" cfsqltype="CF_SQL_CHAR">
+      </cfquery>
+
+      <cfquery datasource="pschool">
+        UPDATE LS_CERTIFICATES 
+        SET 
+        DATE_EXPIRES = <cfqueryparam value="#form.CertificateDateExpires#" cfsqltype="cf_sql_timestamp" NULL="#NOT len(form.CertificateDateExpires)#">
+        WHERE
+        DOMAIN_ID =  <cfqueryparam value="#form.DomainID#" cfsqltype="CF_SQL_NUMERIC">
+      </cfquery>
+
+      <!--redirect back to index.cfm -->
+      <cfset variables.domainupdated = true />
+    </cfif>
+
+    <cfif structKeyExists(variables, 'domainupdated') AND variables.domainupdated >
+      <cflocation url="superindex.cfm" addtoken="no">
+    </cfif>
+
+      <cfif isDefined("url.domainid") AND url.domainid NEQ '' AND IsNumeric(url.domainid)>
+        
+      <cfset domainid = url.domainid />
+        
+      <cfquery datasource="pschool" name="LS">
+          SELECT LS_DOMAINS.root_domain, LS_DOMAINS.ID ID,  LS_DOMAINS.date_expires DA, LS_DOMAINS.date_updated DU, LS_CERTIFICATES.date_expires SA
+          FROM LS_DOMAINS
+          INNER JOIN LS_CERTIFICATES ON LS_DOMAINS.id = LS_CERTIFICATES.domain_id
+          where LS_DOMAINS.ID = #domainid#
+      </cfquery>
+
+      <h3>
+        Please edit root domain and SSL certificate expiration dates
+      </h3>
+      <cfform id="updatetLSDOMAINS" name= "updatetLSDOMAINS" method="post"  >
+      <table >
+        <tr>
+          <th>Action</th>
+          <th>Root domain</th> 
+          <th>Domain Updated</th> 
+          <th>Domain Expires</th> 
+          <th>SSL Certificate Expires</th> 
+        </tr>
+
+        <cfoutput query="LS" group="ID">
+        <tr>
+          <td><cfinput type="submit" name="SubmitEDITED" value="Save"></td>
+          <td>#LS.ROOT_DOMAIN#</td>
+          <cfinput type="hidden" value="#LS.ROOT_DOMAIN#" name="RootDomain"  />
+          <cfinput type="hidden" value="#ID#" name="DomainID"  />
+          <td><cfinput type="text"  name="DomainDateUpdated"  value="#DateTimeFormat(LS.DU, "mm.dd.yyyy")#"  required /></td>
+          <td><cfinput type="text"  name="DomainDateExpires"  value="#DateTimeFormat(LS.DA, "mm.dd.yyyy")#"  required /></td>
+          <td><cfinput type="text"  name="CertificateDateExpires"  value="#DateTimeFormat(LS.SA, "mm.dd.yyyy")#"  required /></td>
+        </tr>
+        </cfoutput>
+      </table>
+      </cfform> 
+
+      <cfelse>
+        <cflocation url="superindex.cfm" >
+      </cfif>
+
+
+
+
+
+<cfelse>
+
+<table >
+  <tr>
+      <th>Edit</th>
+      <th>Root domain</th> 
+     <th>Sub Domain</th> 
+      <th>Domain Expires</th> 
+      <th>SSL Certificate Expires</th> 
+      
+  </tr>
+  
+  <cfoutput query="LS">
+  <tr>
+    <td><a href="superindex.cfm?domainid=#DI#&edit">Edit</a></td>
+    <td>#RD#</td>
+     <td>#SD#</td>
+    <td>#DateTimeFormat(DA, "mm.dd.yyyy")#</td>
+    <td>#DateTimeFormat(SA, "mm.dd.yyyy")#</td>
+   
+    
+  </tr>
+  </cfoutput>
+  
+</table>
+
+</cfif>
+
+
+
+
+
+
+
+</body>
+</html>
