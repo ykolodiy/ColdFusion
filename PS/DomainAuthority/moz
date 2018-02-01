@@ -16,6 +16,22 @@
 
 <!---Set your expires times for several minutes into the future --->
 <!---An expires time excessively far in the future will not be honored by the Mozscape API. --->
+
+
+// for ps.com ubuntu only
+<cfset m = month(now()) >
+
+<cfif (m LT 3 ) and (m GT 10)>
+	<cfset expires = (round(getTickCount() /1000) + 3900)  />
+<cfelse>
+	<cfset expires = (round(getTickCount() /1000) + 300)  />
+</cfif>
+
+
+
+
+
+
 <cfset expires = #round(getTickCount() /1000)# +300  />
 
 <!---Put each parameter on a new line --->
