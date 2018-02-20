@@ -1,0 +1,9 @@
+<cfhttp url="http://WWW:8983/solr/molotov1/select?q=*:*" />
+
+<cfset the_results = {} />
+
+    <!--- We would use ColdFusion's XML functions below (e.g., isXML(), XmlParse()) if we're returning XML data rather than JSON --->
+   
+        <cfset the_results = deserializeJSON(cfhttp.fileContent) />
+   
+<cfdump var="#the_results#" >
