@@ -1,0 +1,150 @@
+<!---
+	Create our "dirty" HTML document. Dirty in the sense that it
+	cannot be parsed as valid XML. In order to make this document
+	"bad", we'll have tags that don't self-close and perhaps a
+	missing close-tag or two.
+--->
+<cfsavecontent variable="dirtyHtml">
+
+	<!doctype html>
+	<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Dana Linn Bailey</title>
+		<meta name="description" content="Strong female muscle, FTW!">
+		<meta name="keywords" content="female muscle,femmuscle,sexy">
+	</head>
+	<body>
+
+		<h1>
+			Dana Linn Bailey
+		</h1>
+
+		<h2>
+			Professional Bodybuilder
+		</h2>
+
+		<p>
+			<IMG
+				SRC="//www.danalinn.com/images/photos/DanaLinnBailey_3.jpg"
+				ALT="Dana Linn Bailey"
+				HEIGHT=250>
+			<br>
+		</p>
+
+		<h3>
+			Professional Services
+		</h3>
+
+		<ul>
+			<li>Full Contest Preparation
+			<li>12-Week Weight Management Program
+			<li>ONE-TIME Personalized Diet Plan
+			<li>ONE-TIME Personalized Week Training Program
+			<li>Train with DLB herself!!!
+		</ul>
+
+		<h2>
+			Biography
+		</h2>
+
+		<p>
+			I grew up a jock. At age 6, I was already on the swim
+			team, waking up and going to practice just like the big
+			kids. Up until high school, I was a 6-sport athlete all
+			year round, playing soccer, basketball, field hockey,
+			softball, running track and also swim team. In high
+			school I continued with my 3 favorite sports, soccer,
+			basketball, and field hockey and excelled in all with
+			many awards.
+
+		<p>
+			<a href=http://www.danalinn.com/about.html>Read More</a>.
+		</p>
+
+	</body>
+	</html>
+
+</cfsavecontent>
+
+
+<!--- ----------------------------------------------------- --->
+<!--- ----------------------------------------------------- --->
+<!--- ----------------------------------------------------- --->
+<!--- ----------------------------------------------------- --->
+
+
+<cfscript>
+
+
+	// I take an HTML string and parse it into an XML(XHTML)
+	// document. This is returned as a standard ColdFusion XML
+	// document.
+	function htmlParse( htmlContent, disableNamespaces = true ){
+
+		// Create an instance of the Xalan SAX2DOM class as the
+		// recipient of the TagSoup SAX (Simple API for XML) compliant
+		// events. TagSoup will parse the HTML and announce events as
+		// it encounters various HTML nodes. The SAX2DOM instance will
+		// listen for such events and construct a DOM tree in response.
+		var saxDomBuilder = createObject( "java", "com.sun.org.apache.xalan.internal.xsltc.trax.SAX2DOM" ).init(javacast("boolean", true));
+
+		// Create our TagSoup parser.
+		var tagSoupParser = createObject( "java", "org.ccil.cowan.tagsoup.Parser" ).init();
+
+		// Check to see if namespaces are going to be disabled in the
+		// parser. If so, then they will not be added to elements.
+		if (disableNamespaces){
+
+			// Turn off namespaces - they are lame an nobody likes
+			// to perform xmlSearch() methods with them in place.
+			tagSoupParser.setFeature(
+				tagSoupParser.namespacesFeature,
+				javaCast( "boolean", false )
+			);
+
+		}
+
+		// Set our DOM builder to be the listener for SAX-based
+		// parsing events on our HTML.
+		tagSoupParser.setContentHandler( saxDomBuilder );
+
+		// Create our content input. The InputSource encapsulates the
+		// means by which the content is read.
+		var inputSource = createObject( "java", "org.xml.sax.InputSource" ).init(
+			createObject( "java", "java.io.StringReader" ).init( htmlContent )
+		);
+
+		// Parse the HTML. This will trigger events which the SAX2DOM
+		// builder will translate into a DOM tree.
+		tagSoupParser.parse( inputSource );
+
+		// Now that the HTML has been parsed, we have to get a
+		// representation that is similar to the XML document that
+		// ColdFusion users are used to having. Let's search for the
+		// ROOT document and return is.
+		return(
+			xmlSearch( saxDomBuilder.getDom(), "/node()" )[ 1 ]
+		);
+
+	}
+
+
+	// ------------------------------------------------------ //
+	// ------------------------------------------------------ //
+
+
+	// Parse the "dirty" HTML into a valid XML document.
+	xhtml = htmlParse( dirtyHtml );
+
+	// Query for the head contents.
+	headContents = xmlSearch( xhtml, "/html/head/*" );
+
+	// Query for the body contents.
+	bodyContents = xmlSearch( xhtml, "/html/body/*" );
+
+// Output the two values.
+writeDump( headContents );
+writeDump( bodyContents );
+
+
+</cfscript>
