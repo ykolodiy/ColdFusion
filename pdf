@@ -1,0 +1,63 @@
+//http://www.learncfinaweek.com/week1/cfpdf/
+
+1 MERGE
+<cfpdf action="merge"  destination="mergedPDF.pdf" overwrite="yes">
+    <cfpdfparam source="1095C.pdf"    />
+    <cfpdfparam source="CANCUN.pdf" />
+    
+</cfpdf>
+<cfpdf action="read" name="myPDF" source="mergedPDF.pdf" />
+<cfcontent variable="#toBinary(myPDF)#" type="application/pdf" />
+
+2 Merging a Directory of PDFs
+If you use the directory argument on a cfpdf merge action, you can specify a folder that contains multiple PDFs and merge them into one PDF. The order strategy is either by name (ascending alphabetical) or time (ascending by file time stamp). Each file in the directory is evaluated if it is a valid PDF readable by ColdFusion; if you have stoponerror="yes", then the cfpdf tag will error if any of the files in the directory are not valid PDFs. If you have stoponerror="no", then any non-PDF files will be skipped.
+
+<cfpdf action="merge"  directory="./" orde ascending="yes" stoponerror="false" overwrite="yes" destination="mergedPDf.pdf" />
+<cfpdf action="read" name="myPDF" source="mergedPDF.pdf" />
+<cfcontent variable="#toBinary(myPDF)#" type="application/pdf" />
+
+3
+Deleting Pages
+You can remove a single page or a range of pages using the action="delete" on the cfpdf tag. Specifying a destination is optional for delete actions. If you do not specify a destination, the page or pages will be deleted from the original source PDF.
+
+<cfpdf action="deletepages" pages="2-3" source="mergedPDF.pdf" />
+<cfpdf action="read" name="myPDF" source="mergedPDF.pdf" />
+<cfcontent variable="#toBinary(myPDF)#" type="application/pdf" />
+
+
+Reading a PDF
+The cfpdf tag accepts an action property, which currently has 18 possible values. Choosing the 'read' action will take an existing PDF, read it to memory, and store it in a variable name of your choosing.
+
+<cfpdf action="read" name="myDoc" source="C:\docs\mypdf.pdf" />
+<cfdump var="#myDoc#" />
+The above code will dump out the metadata for the chosen PDF such as the author, date created, keywords, etc. This is the same information you would receive if you used the action="getinfo" argument; however, with the getInfo action, you can access the values of resulting operation. If you wanted to display the PDF to the browser, the following code could be used:
+
+<cfpdf action="read" name="myDoc" source="C:\docs\mypdf.pdf" />
+<cfcontent variable="#toBinary(myDoc)#" type="application/pdf" />
+Creating Thumbnails of PDF Pages
+<cfpdf action="read" name="myDoc" source="C:\docs\mypdf.pdf" />
+<cfpdf action="thumbnail" source="myDoc" destination="C:\docs\" overwrite="yes" />
+<cfimage action="read" name="img" source="C:\docs\thumbnail_page_1.jpg" format="jpg" />
+<cfcontent reset="true" variable="#imageGetBlob(img)#" type="image/jpeg" />
+The above code will read a PDF and create 25% scale JPG thumbnails for all the pages in the C:\Docs folder. The default naming convention in CF 10 is thumbnail_page_1, thumbnail_page_2, and so on. Format can be set to JPG, TIFF, or PNG. The thumbnail action also has other arguments that work along with it to determine the scale, max breadth, resolution, and naming scheme for the generated thumbnail.
+
+Extracting Images
+Most images embedded in a PDF can be extracted and saved to a folder of your choice using a file prefix of your choice. By default, the file prefix is "cfimage-" and the image number. The default destination is in the same folder as the ColdFusion page calling the cfpdf tag.
+
+<cfpdf action="extractimage" source="./mypdf.pdf"  overwrite="yes" /> 
+<img src="cfimage-0.jpg" />
+<br />
+<img src="cfimage-1.jpg" />
+Extracting Text
+If you desire to extract the text of a PDF, such as if you wanted to search and catalog words used in the PDF, you can do so with the extractText action. The extractText action will return a XML document; each page of text is in its own XML node name with a corresponding page number. You can then use ColdFusion's powerful XML parsing tags to interact with the XML document. The code below will output the XML from a PDF to the browser for you.
+
+<cfpdf action="extracttext" source="./mypdf.pdf" name="myXML" />
+<cfcontent type="text/xml" />
+<cfoutput>#myXML#</cfoutput>
+Merging PDF Documents
+Merging Using a List
+There are a variety of ways ColdFusion can merge different PDF documents together. The simplest is to pass a comma delimited list of PDF files, which will append them in the order you list them.
+
+<cfpdf action="merge" source="mypdf.pdf,beer.pdf" destination="mergedPDF.pdf" overwrite="yes" />
+<cfpdf action="read" name="myPDF" source="mergedPDF.pdf" />
+<cfcontent variable="#toBinary(myPDF)#" type="application/pdf" />
