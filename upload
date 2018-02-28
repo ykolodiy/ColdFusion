@@ -1,0 +1,30 @@
+<!--- Windows Example  PDF only---> 
+<!--- Check to see if the Form variable exists. ---> 
+<cfif isDefined("Form.FileContents") > 
+    <!--- If TRUE, upload the file. ---> 
+    
+    <cftry>
+    	
+    <cffile action = "upload"  
+        fileField = "FileContents"  
+        destination = #ExpandPath( "./" )# 
+        accept = "application/pdf"  
+        nameConflict = "MakeUnique"> 
+        
+        <cfcatch type="any">
+        	Error, is it PDF file?
+        </cfcatch>
+     </cftry> 
+                
+<cfelse> 
+    <!--- If FALSE, show the Form. ---> 
+    <form method="post" 
+        action="<cfoutput>#cgi.script_name#</cfoutput>"  
+        name="uploadForm" 
+        <!---enctype="multipart/form-data" No characters are encoded. This value is required when you are using forms that have a file upload control --->
+        enctype="multipart/form-data"> 
+        <input name="FileContents" type="file"> 
+       
+        <input name="submit" type="submit" value="Upload File">  
+    </form> 
+</cfif>
