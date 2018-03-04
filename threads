@@ -1,0 +1,39 @@
+<!--- ThreadA loops to simulate an initialization activity that might take time. ---> 
+<cfthread name="threadA" action="run"> 
+        <cfset thread.j=1> 
+        <cfloop index="i" from="1" to="9999779"> 
+         <cfset thread.j=thread.j+1>  
+    </cfloop> 
+</cfthread> 
+ 
+<!--- ThreadB loops while threadA is not finished, sleeping for  
+        1/2 second each time. --->  
+<cfthread name="threadB" action="run"> 
+    <cfscript> 
+        thread.sleepTimes=0; 
+        thread.initialized=false; 
+        while ((threadA.Status != "COMPLETED") && (threadA.Status  
+                != "TERMINATED")) { 
+            sleep(500); 
+            thread.sleeptimes++; 
+        } 
+        // Only do the post-initilization code if the threadA completed. 
+        If (threadA.Status == "COMPLETED") { 
+            thread.initialized=true;  
+            // Post-initialization code would go here. 
+        } 
+    </cfscript> 
+</cfthread> 
+ 
+<!Join the threads. ---> 
+<cfthread action="join" name="threadA,threadB" timeout="10000"/> 
+ 
+<!--- Display the thread information. ---> 
+<!--- Different actions might be taken based on the thread status information. ---> 
+<cfoutput> 
+    threadA index value: #threadA.j#<br /> 
+    threadA status: #threadA.Status#<br> 
+    threadB status: #threadB.Status#<br> 
+    threadB sleepTimes: #threadB.sleepTimes#<br> 
+    threadB initialized: #threadB.initialized#<br> 
+</cfoutput>
