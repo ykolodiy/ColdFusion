@@ -1,0 +1,10 @@
+<cfoutput> 
+HANUSKA <BR>born :  #DateFormat(CreateDate(2017, 05, 06), "full")# <BR><BR>
+today: #DateFormat(Now(), "full")# <BR>
+
+<BR><BR>
+#dateDiff("yyyy", CreateDate(2017, 05, 06) , now())# YEARS<BR>
+#dateDiff("m", CreateDate(2017, 05, 06) , now())# MONTHS<BR>
+#dateDiff("w", CreateDate(2017, 05, 06) , now())# WEEKS<BR>
+#dateDiff("d", CreateDate(2017, 05, 06) , now())# DAYS<BR>
+ </cfoutput>
