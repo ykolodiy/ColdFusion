@@ -1,0 +1,12 @@
+The NULL attribute of cfqueryparam can take a value of ‘yes|true’ or ‘no|false’ and if set to ‘yes|true’ then anything in the ‘value’ attribute is ignored and a NULL is passed to the database. This is what we want! Unfortunately though if I do use null=“yes” and I also have a ‘value’, then that value will be ignored and NULL will be used instead. To get around this I need to do something like:
+
+<cfif NOT len(trim(form.iAge))>
+	<cfqueryparam cfsqltype="cf_sql_integer" value="#trim(form.iAge)#" maxlength="3" null="yes" />
+<cfelse>
+	<cfqueryparam cfsqltype="cf_sql_integer" value="#trim(form.iAge)#" maxlength="3" />
+</cfif>
+That would work but it’s not really that neat or optimal (in terms of coding and reading).
+
+As usual it’s always the simple solutions which are right in front of you that work the best! Today I saw a nice solution to this all too common problem from Ian Skinner over on Google groups where Ian used the yesNoFormat() and len() functions to conditionally pass in null or a value like:
+
+<cfqueryparam cfsqltype="cf_sql_integer" value="#trim(form.iAge)#" maxlength="3" null="#yesNoFormat(NOT len(trim(form.iAge)))#" />
