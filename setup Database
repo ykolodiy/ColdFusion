@@ -29,3 +29,13 @@ cfelse
  cfparam default=1
   /cfif
   /cfquery
+
+
+
+add database to application.cfm
+this.datasources["pschool"] = {
+	  class: 'oracle.jdbc.driver.OracleDriver'
+	, connectionString: 'jdbc:oracle:thin:@host:port:dbname'
+	, username: 'jaja'
+	, password: "e8fd62"
+};
